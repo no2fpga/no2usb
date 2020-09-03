@@ -1,4 +1,14 @@
 #!/usr/bin/env python3
+#
+# Generate USB string include files from text source
+#
+# Input format is one USB string per line. If it starts with '!{', then
+# it's loaded as a json dict and indexed with the board name, with the
+# empty string being used as default value.
+#
+# Copyright (C) 2019-2020 Sylvain Munaut
+# SPDX-License-Identifier: MIT
+#
 
 import json
 import sys

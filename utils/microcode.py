@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+#
+# USB transaction microcode
+#
+# Copyright (C) 2019-2020 Sylvain Munaut
+# SPDX-License-Identifier: MIT
+#
 
 import sys
 import types
