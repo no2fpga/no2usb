@@ -34,12 +34,12 @@ module usb #(
 	input  wire ep_clk,
 
 	// Bus interface
-	input  wire [11:0] bus_addr,
-	input  wire [15:0] bus_din,
-	output wire [15:0] bus_dout,
-	input  wire bus_cyc,
-	input  wire bus_we,
-	output wire bus_ack,
+	input  wire [11:0] wb_addr,
+	output wire [15:0] wb_rdata,
+	input  wire [15:0] wb_wdata,
+	input  wire        wb_we,
+	input  wire        wb_cyc,
+	output wire        wb_ack,
 
 	// IRQ
 	output wire irq,
@@ -368,11 +368,11 @@ module usb #(
 		.p_write_0(eps_write_0),
 		.p_din_0(eps_wrdata_0),
 		.p_dout_3(eps_rddata_3),
-		.s_addr_0(bus_addr[7:0]),
+		.s_addr_0(wb_addr[7:0]),
 		.s_read_0(eps_bus_ready),
 		.s_zero_0(eps_bus_zero),
 		.s_write_0(eps_bus_write),
-		.s_din_0(bus_din),
+		.s_din_0(wb_wdata),
 		.s_dout_3(eps_bus_dout),
 		.s_ready_0(eps_bus_ready),
 		.clk(clk),
@@ -394,11 +394,11 @@ module usb #(
 			evt_rd_ack  <= 1'b0;
 		end else begin
 			csr_bus_req <= 1'b1;
-			cr_bus_we   <= (bus_addr[1:0] == 2'b00) &  bus_we;
-			cel_rel     <= (bus_addr[1:0] == 2'b01) &  bus_we & bus_din[13];
-			rst_clear   <= (bus_addr[1:0] == 2'b01) &  bus_we & bus_din[ 9];
-			sof_clear   <= (bus_addr[1:0] == 2'b01) &  bus_we & bus_din[ 8];
-			evt_rd_ack  <= (bus_addr[1:0] == 2'b10) & ~bus_we & evt_rd_rdy;
+			cr_bus_we   <= (wb_addr[1:0] == 2'b00) &  wb_we;
+			cel_rel     <= (wb_addr[1:0] == 2'b01) &  wb_we & wb_wdata[13];
+			rst_clear   <= (wb_addr[1:0] == 2'b01) &  wb_we & wb_wdata[ 9];
+			sof_clear   <= (wb_addr[1:0] == 2'b01) &  wb_we & wb_wdata[ 8];
+			evt_rd_ack  <= (wb_addr[1:0] == 2'b10) & ~wb_we & evt_rd_rdy;
 		end
 
 	// Read mux for CSR
@@ -417,7 +417,7 @@ module usb #(
 
 	always @(*)
 		if (csr_bus_ack)
-			case (bus_addr[1:0])
+			case (wb_addr[1:0])
 				2'b00:   csr_bus_dout = csr_readout;
 				2'b10:   csr_bus_dout = evt_rd_data;
 				default: csr_bus_dout = 16'h0000;
@@ -427,15 +427,15 @@ module usb #(
 
 	// CSR Clear/Ack
 	assign csr_bus_ack   = csr_bus_req;
-	assign csr_bus_clear = ~bus_cyc | csr_bus_ack | bus_addr[11];
+	assign csr_bus_clear = ~wb_cyc | csr_bus_ack | wb_addr[11];
 
 	// Write regs
 	always @(posedge clk)
 		if (cr_bus_we) begin
-			cr_pu_ena  <= bus_din[15];
-			cr_cel_ena <= bus_din[12];
-			cr_addr_chk<= bus_din[7];
-			cr_addr    <= bus_din[6:0];
+			cr_pu_ena  <= wb_wdata[15];
+			cr_cel_ena <= wb_wdata[12];
+			cr_addr_chk<= wb_wdata[7];
+			cr_addr    <= wb_wdata[6:0];
 		end
 
 	// Request lines for EP Status access
@@ -445,35 +445,35 @@ module usb #(
 			eps_bus_write <= 1'b0;
 			eps_bus_req   <= 1'b0;
 		end else begin
-			eps_bus_read  <=  bus_addr[11] & ~bus_we;
-			eps_bus_write <=  bus_addr[11] &  bus_we;
-			eps_bus_req   <=  bus_addr[11];
+			eps_bus_read  <= wb_addr[11] & ~wb_we;
+			eps_bus_write <= wb_addr[11] &  wb_we;
+			eps_bus_req   <= wb_addr[11];
 		end
 
 	assign eps_bus_zero = ~eps_bus_read;
 
 	// EPS Clear
-	assign eps_bus_clear = ~bus_cyc | eps_bus_ack_wait | (eps_bus_req & eps_bus_ready);
+	assign eps_bus_clear = ~wb_cyc | eps_bus_ack_wait | (eps_bus_req & eps_bus_ready);
 
 	// Track when request are accepted by the RAM
 	assign eps_bus_req_ok = (eps_bus_req & eps_bus_ready);
 
 	always @(posedge clk)
-		eps_bus_req_ok_dly <= { eps_bus_req_ok_dly[1:0], eps_bus_req_ok & ~bus_we };
+		eps_bus_req_ok_dly <= { eps_bus_req_ok_dly[1:0], eps_bus_req_ok & ~wb_we };
 
 	// ACK wait state tracking
 	always @(posedge clk or posedge rst)
 		if (rst)
 			eps_bus_ack_wait <= 1'b0;
 		else
-			eps_bus_ack_wait <= ((eps_bus_ack_wait & ~bus_we) | eps_bus_req_ok) & ~eps_bus_req_ok_dly[2];
+			eps_bus_ack_wait <= ((eps_bus_ack_wait & ~wb_we) | eps_bus_req_ok) & ~eps_bus_req_ok_dly[2];
 
 	// Bus Ack
-	assign bus_ack = csr_bus_ack | (eps_bus_ack_wait & (bus_we | eps_bus_req_ok_dly[2]));
+	assign wb_ack = csr_bus_ack | (eps_bus_ack_wait & (wb_we | eps_bus_req_ok_dly[2]));
 
 	// Output is simply the OR of all local units since we force them to zero if
 	// they're not accessed
-	assign bus_dout = csr_bus_dout | eps_bus_dout;
+	assign wb_rdata = csr_bus_dout | eps_bus_dout;
 
 
 	// Event handling
