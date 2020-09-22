@@ -344,7 +344,7 @@ module usb_trans #(
 		// Delay line for what to expect on read data
 	always @(posedge clk or posedge rst)
 		if (rst)
-			epfw_cap_dl = 6'b000000;
+			epfw_cap_dl <= 6'b000000;
 		else
 			epfw_cap_dl <= {
 				epfw_state[1],
