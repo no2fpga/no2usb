@@ -63,6 +63,12 @@ struct usb_conf_desc {
 	uint8_t  bMaxPower;
 } __attribute__((packed));
 
+struct usb_str_desc {
+	uint8_t  bLength;
+	uint8_t  bDescriptorType;
+	uint16_t wString[];
+} __attribute__((packed));
+
 struct usb_intf_desc {
 	uint8_t  bLength;
 	uint8_t  bDescriptorType;
@@ -93,12 +99,6 @@ struct usb_intf_assoc_desc {
 	uint8_t  bFunctionSubClass;
 	uint8_t  bFunctionProtocol;
 	uint8_t  iFunction;
-} __attribute__((packed));
-
-struct usb_str_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint16_t wString[];
 } __attribute__((packed));
 
 struct usb_dfu_desc {
