@@ -8,6 +8,7 @@ HEADERS_no2usb=$(addprefix $(CORE_no2usb_DIR)/fw/v0/include/, \
 	no2usb/usb_dfu_proto.h \
 	no2usb/usb_dfu_rt.h \
 	no2usb/usb_hw.h \
+	no2usb/usb_msos20.h \
 	no2usb/usb_priv.h \
 	no2usb/usb_proto.h \
 )
@@ -19,6 +20,7 @@ SOURCES_no2usb=$(addprefix $(CORE_no2usb_DIR)/fw/v0/src/, \
 	usb_dfu.c \
 	usb_dfu_rt.c \
 	usb_dfu_vendor.c \
+	usb_msos20.c \
 )
 
 usb_str_%.gen.h: usb_str_%.txt
