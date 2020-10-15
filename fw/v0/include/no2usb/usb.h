@@ -20,6 +20,7 @@ struct usb_xfer;
 
 struct usb_stack_descriptors {
 	const struct usb_dev_desc *dev;
+	const struct usb_bos_desc *bos;
 	const struct usb_conf_desc * const *conf;
 	int n_conf;
 	const struct usb_str_desc * const *str;

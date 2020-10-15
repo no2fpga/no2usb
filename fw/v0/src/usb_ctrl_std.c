@@ -160,6 +160,12 @@ _get_descriptor(struct usb_ctrl_req *req, struct usb_xfer *xfer)
 			xfer->len  = g_usb.stack_desc->str[idx]->bLength;
 		}
 		break;
+
+	case 0x0f00:	/* BOS */
+		if (g_usb.stack_desc->bos) {
+			xfer->data = (void*)g_usb.stack_desc->bos;
+			xfer->len  = g_usb.stack_desc->bos->wTotalLength;
+		}
 	}
 
 	return xfer->data != NULL;
