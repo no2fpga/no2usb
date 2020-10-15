@@ -21,8 +21,8 @@ static int g_dfu_rt_intf;
 static bool
 _dfu_detach_done_cb(struct usb_xfer *xfer)
 {
-        usb_dfu_rt_cb_reboot();
-        return true;
+	usb_dfu_rt_cb_reboot();
+	return true;
 }
 
 static enum usb_fnd_resp
