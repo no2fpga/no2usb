@@ -90,6 +90,9 @@ static const uint32_t dfu_valid_req[_DFU_MAX_STATE] = {
 };
 
 static struct {
+	const struct usb_dfu_zone *zones;
+	int n_zones;
+
 	enum dfu_state state;
 	enum dfu_status status;
 
@@ -115,14 +118,6 @@ static struct {
 		} op;
 	} flash;
 } g_dfu;
-
-static const struct {
-	uint32_t start;
-	uint32_t end;
-} dfu_zones[2] = {
-	{ 0x00080000, 0x000a0000 },	/* iCE40 bitstream */
-	{ 0x000a0000, 0x000c0000 },	/* RISC-V firmware */
-};
 
 
 static void
@@ -327,13 +322,16 @@ _dfu_set_intf(const struct usb_intf_desc *base, const struct usb_intf_desc *sel)
 	    (sel->bInterfaceProtocol != 0x02))
 		return USB_FND_CONTINUE;
 
+	if (sel->bAlternateSetting >= g_dfu.n_zones)
+		return USB_FND_ERROR;
+
 	g_dfu.state = dfuIDLE;
 	g_dfu.intf  = sel->bInterfaceNumber;
 	g_dfu.alt   = sel->bAlternateSetting;
 
-	g_dfu.flash.addr_prog  = dfu_zones[g_dfu.alt].start;
-	g_dfu.flash.addr_erase = dfu_zones[g_dfu.alt].start;
-	g_dfu.flash.addr_end   = dfu_zones[g_dfu.alt].end;
+	g_dfu.flash.addr_prog  = g_dfu.zones[g_dfu.alt].start;
+	g_dfu.flash.addr_erase = g_dfu.zones[g_dfu.alt].start;
+	g_dfu.flash.addr_end   = g_dfu.zones[g_dfu.alt].end;
 
 	return USB_FND_SUCCESS;
 }
@@ -369,11 +367,13 @@ usb_dfu_cb_reboot(void)
 }
 
 void
-usb_dfu_init(void)
+usb_dfu_init(const struct usb_dfu_zone *zones, int n_zones)
 {
 	memset(&g_dfu, 0x00, sizeof(g_dfu));
 
-	g_dfu.state = appDETACH;
+	g_dfu.zones   = zones;
+	g_dfu.n_zones = n_zones;
+	g_dfu.state   = appDETACH;
 
 	usb_register_function_driver(&_dfu_drv);
 }
