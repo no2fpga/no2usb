@@ -96,6 +96,7 @@ static struct {
 	uint8_t tick;
 	uint8_t intf;	// Selected interface number
 	uint8_t alt;	// Selected alt settings
+	bool    armed;	// Is it armed for reboot on usb reset ?
 
 	uint8_t buf[4096] __attribute__((aligned(4)));
 
@@ -158,6 +159,7 @@ _dfu_tick(void)
 			g_dfu.flash.op = FL_IDLE;
 			g_dfu.state = dfuDNLOAD_IDLE;
 			g_dfu.flash.addr_prog += g_dfu.flash.op_len;
+			g_dfu.armed = true;
 		} else {
 			/* Max len */
 			unsigned l = g_dfu.flash.op_len - g_dfu.flash.op_ofs;
@@ -177,7 +179,7 @@ _dfu_tick(void)
 static void
 _dfu_bus_reset(void)
 {
-	if (g_dfu.state != appDETACH)
+	if (g_dfu.armed)
 		usb_dfu_cb_reboot();
 }
 
