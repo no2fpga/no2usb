@@ -134,7 +134,7 @@ _dfu_tick(void)
 	g_dfu.tick = 0;
 
 	/* Anything to do ? Is flash ready ? */
-	if ((g_dfu.flash.op == FL_IDLE) || (flash_read_sr() & 1))
+	if ((g_dfu.flash.op == FL_IDLE) || usb_dfu_cb_flash_busy())
 		return;
 
 	/* Erase */
@@ -145,8 +145,7 @@ _dfu_tick(void)
 			g_dfu.flash.op = FL_PROGRAM;
 		} else{
 			/* No, issue the next command */
-			flash_write_enable();
-			flash_sector_erase(g_dfu.flash.addr_erase);
+			usb_dfu_cb_flash_erase(g_dfu.flash.addr_erase, 4096);
 			g_dfu.flash.addr_erase += 4096;
 		}
 	}
@@ -167,8 +166,7 @@ _dfu_tick(void)
 				l = pl;
 
 			/* Write page */
-			flash_write_enable();
-			flash_page_program(&g_dfu.buf[g_dfu.flash.op_ofs], g_dfu.flash.addr_prog + g_dfu.flash.op_ofs, l);
+			usb_dfu_cb_flash_program(&g_dfu.buf[g_dfu.flash.op_ofs], g_dfu.flash.addr_prog + g_dfu.flash.op_ofs, l);
 
 			/* Next page */
 			g_dfu.flash.op_ofs += l;
