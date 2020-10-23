@@ -96,7 +96,6 @@ static struct {
 	enum dfu_state state;
 	enum dfu_status status;
 
-	uint8_t tick;
 	uint8_t intf;	// Selected interface number
 	uint8_t alt;	// Selected alt setting
 	bool    armed;	// Is it armed for reboot on usb reset ?
@@ -124,11 +123,6 @@ static struct {
 static void
 _dfu_tick(void)
 {
-	/* Rate limit to once every 10 ms */
-	if (g_dfu.tick++ < 10)
-		return;
-
-	g_dfu.tick = 0;
 
 	/* Anything to do ? Is flash ready ? */
 	if ((g_dfu.flash.op == FL_IDLE) || usb_dfu_cb_flash_busy())
