@@ -19,6 +19,7 @@
 #define num_elem(a) (sizeof(a) / sizeof(a[0]))
 
 #define U16_TO_U8_LE(x) ((x) & 0xff), (((x) >> 8) & 0xff)
+#define U24_TO_U8_LE(x) ((x) & 0xff), (((x) >> 8) & 0xff), (((x) >> 16) & 0xff)
 #define U32_TO_U8_LE(x) ((x) & 0xff), (((x) >> 8) & 0xff), (((x) >> 16) & 0xff), (((x) >> 24) & 0xff)
 
 
