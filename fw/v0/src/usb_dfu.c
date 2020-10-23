@@ -22,7 +22,7 @@ enum usb_fnd_resp dfu_vendor_ctrl_req(struct usb_ctrl_req *req, struct usb_xfer 
 #endif
 
 
-#define DFU_POLL_MS		250
+#define DFU_POLL_MS		10
 
 
 static const uint32_t dfu_valid_req[_DFU_MAX_STATE] = {
