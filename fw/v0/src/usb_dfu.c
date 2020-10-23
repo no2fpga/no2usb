@@ -98,7 +98,7 @@ static struct {
 
 	uint8_t tick;
 	uint8_t intf;	// Selected interface number
-	uint8_t alt;	// Selected alt settings
+	uint8_t alt;	// Selected alt setting
 	bool    armed;	// Is it armed for reboot on usb reset ?
 
 	uint8_t buf[4096] __attribute__((aligned(4)));

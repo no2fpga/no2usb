@@ -171,7 +171,7 @@ usb_handle_control_request(struct usb_ctrl_req *req)
 	/* Buffer size vs request size checks */
 	if (req->wLength > g_usb.ctrl.xfer.len) {
 		if (!USB_REQ_IS_READ(req)) {
-			/* If this is a OUT treansaction and no suitable buffer was
+			/* If this is a OUT transaction and no suitable buffer was
 			 * provided, there isn't much we can do ... */
 			USB_LOG_ERR("[!] Control request handler failed to provide enough buffer space");
 			goto error;
