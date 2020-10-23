@@ -111,6 +111,17 @@ struct usb_ep_desc {
 	uint8_t  bInterval;
 } __attribute__((packed));
 
+struct usb_cc_ep_desc {
+	uint8_t  bLength;
+	uint8_t  bDescriptorType;
+	uint8_t  bEndpointAddress;
+	uint8_t  bmAttributes;
+	uint16_t wMaxPacketSize;
+	uint8_t  bInterval;
+	uint8_t  bRefresh;
+	uint8_t  bSynchAddress;
+} __attribute__((packed));
+
 struct usb_intf_assoc_desc {
 	uint8_t  bLength;
 	uint8_t  bDescriptorType;
