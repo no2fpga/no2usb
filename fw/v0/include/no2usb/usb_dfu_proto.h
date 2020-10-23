@@ -1,11 +1,31 @@
 /*
  * usb_dfu_proto.h
  *
+ * See USB Device Firmware Upgrade Specification, Revision 1.1
+ *
  * Copyright (C) 2019-2020  Sylvain Munaut <tnt@246tNt.com>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #pragma once
+
+/* Descriptors (Section 4) */
+
+enum usb_dfu_desc_type {
+	USB_DFU_DT_FUNC		= 33,
+};
+
+struct usb_dfu_func_desc {
+	uint8_t  bLength;
+	uint8_t  bDescriptorType;
+	uint8_t  bmAttributes;
+	uint16_t wDetachTimeOut;
+	uint16_t wTransferSize;
+	uint16_t bcdDFUVersion;
+} __attribute__((packed));
+
+
+/* Control requests (Section 3, Table 3.1/3.2) */
 
 #define USB_REQ_DFU_DETACH	(0)
 #define USB_REQ_DFU_DNLOAD	(1)
@@ -23,6 +43,8 @@
 #define USB_RT_DFU_GETSTATE	((5 << 8) | 0xa1)
 #define USB_RT_DFU_ABORT	((6 << 8) | 0x21)
 
+
+/* State / Status (Section 6.1.2) */
 
 enum dfu_state {
 	appIDLE = 0,

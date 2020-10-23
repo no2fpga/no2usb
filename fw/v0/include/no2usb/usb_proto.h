@@ -40,7 +40,6 @@ enum usb_desc_type {
 	USB_DT_INTF_ASSOC	= 11,
 	USB_DT_BOS		= 15,
 	USB_DT_DEV_CAP		= 16,
-	USB_DT_DFU		= 33,
 };
 
 enum usb_cs_desc_type {
@@ -136,15 +135,6 @@ struct usb_bos_plat_cap_hdr {
 	uint8_t bDevCapabilityType;
 	uint8_t bReserved;
 	uint8_t PlatformCapabilityUUID[16];
-} __attribute__((packed));
-
-struct usb_dfu_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bmAttributes;
-	uint16_t wDetachTimeOut;
-	uint16_t wTransferSize;
-	uint16_t bcdDFUVersion;
 } __attribute__((packed));
 
 struct usb_cs_intf_hdr_desc {
