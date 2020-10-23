@@ -104,6 +104,7 @@ static struct {
 	uint8_t buf[4096] __attribute__((aligned(4)));
 
 	struct {
+		uint32_t addr_read;
 		uint32_t addr_prog;
 		uint32_t addr_erase;
 		uint32_t addr_end;
@@ -260,8 +261,24 @@ _dfu_ctrl_req(struct usb_ctrl_req *req, struct usb_xfer *xfer)
 		break;
 
 	case USB_RT_DFU_UPLOAD:
-		/* Not supported */
-		goto error;
+		/* Current USB API doesn't have option to defer data, so read
+		 * flash synchronously here, not a big deal since we have
+		 * nothing better to do anyway */
+
+		/* Setup buffer for data */
+		xfer->len  = req->wLength;
+		xfer->data = g_dfu.buf;
+
+		/* Check length doesn't overflow */
+		if ((g_dfu.flash.addr_read + xfer->len) > g_dfu.flash.addr_end)
+			xfer->len = g_dfu.flash.addr_end - g_dfu.flash.addr_read;
+
+		/* Read */
+		if (xfer->len) {
+			usb_dfu_cb_flash_read(xfer->data, g_dfu.flash.addr_read, xfer->len);
+			g_dfu.flash.addr_read += xfer->len;
+		}
+		break;
 
 	case USB_RT_DFU_GETSTATUS:
 		/* Update state */
@@ -329,6 +346,7 @@ _dfu_set_intf(const struct usb_intf_desc *base, const struct usb_intf_desc *sel)
 	g_dfu.intf  = sel->bInterfaceNumber;
 	g_dfu.alt   = sel->bAlternateSetting;
 
+	g_dfu.flash.addr_read  = g_dfu.zones[g_dfu.alt].start;
 	g_dfu.flash.addr_prog  = g_dfu.zones[g_dfu.alt].start;
 	g_dfu.flash.addr_erase = g_dfu.zones[g_dfu.alt].start;
 	g_dfu.flash.addr_end   = g_dfu.zones[g_dfu.alt].end;
