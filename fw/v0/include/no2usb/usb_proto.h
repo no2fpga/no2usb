@@ -41,8 +41,15 @@ enum usb_desc_type {
 	USB_DT_BOS		= 15,
 	USB_DT_DEV_CAP		= 16,
 	USB_DT_DFU		= 33,
-	USB_DT_CS_INTF		= 36,
-	USB_DT_CS_EP		= 37,
+};
+
+enum usb_cs_desc_type {
+	USB_CS_DT_UNDEFINED	= 32,
+	USB_CS_DT_DEV		= 33,
+	USB_CS_DT_CONF		= 34,
+	USB_CS_DT_STR		= 35,
+	USB_CS_DT_INTF		= 36,
+	USB_CS_DT_EP		= 37,
 };
 
 struct usb_desc_hdr {
