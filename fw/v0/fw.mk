@@ -4,6 +4,7 @@ INC_no2usb := -I$(CORE_no2usb_DIR)/fw/v0/include
 
 HEADERS_no2usb=$(addprefix $(CORE_no2usb_DIR)/fw/v0/include/, \
 	no2usb/usb.h \
+	no2usb/usb_cdc_proto.h \
 	no2usb/usb_dfu.h \
 	no2usb/usb_dfu_proto.h \
 	no2usb/usb_dfu_rt.h \

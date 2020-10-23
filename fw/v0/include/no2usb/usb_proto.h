@@ -137,36 +137,6 @@ struct usb_bos_plat_cap_hdr {
 	uint8_t PlatformCapabilityUUID[16];
 } __attribute__((packed));
 
-struct usb_cs_intf_hdr_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bDescriptorsubtype;
-	uint16_t bcdCDC;
-} __attribute__((packed));
-
-struct usb_cs_intf_acm_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bDescriptorsubtype;
-	uint8_t  bmCapabilities;
-} __attribute__((packed));
-
-struct usb_cs_intf_union_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bDescriptorsubtype;
-	uint8_t  bMasterInterface;
-	/* uint8_t  bSlaveInterface[]; */
-} __attribute__((packed));
-
-struct usb_cs_intf_call_mgmt_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bDescriptorsubtype;
-	uint8_t  bmCapabilities;
-	uint8_t  bDataInterface;
-} __attribute__((packed));
-
 
 // Control requests
 // ----------------
