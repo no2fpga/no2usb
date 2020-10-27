@@ -221,7 +221,7 @@ _get_interface(struct usb_ctrl_req *req, struct usb_xfer *xfer)
 	enum usb_fnd_resp rv;
 
 	/* Check interface exits */
-	if (usb_desc_find_intf(NULL, idx, 0, NULL))
+	intf = usb_desc_find_intf(NULL, idx, 0, NULL);
 	if (intf == NULL)
 		return false;
 
