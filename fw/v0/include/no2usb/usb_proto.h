@@ -51,6 +51,30 @@ enum usb_cs_desc_type {
 	USB_CS_DT_EP		= 37,
 };
 
+enum usb_class {
+	USB_CLS_AUDIO		= 0x01,
+	USB_CLS_COMMUNICATIONS	= 0x02,
+	USB_CLS_CDC_CONTROL	= 0x02,
+	USB_CLS_HID		= 0x03,
+	USB_CLS_PHYSICAL	= 0x05,
+	USB_CLS_IMAGE		= 0x06,
+	USB_CLS_PRINTER		= 0x07,
+	USB_CLS_MASS_STORAGE	= 0x08,
+	USB_CLS_HUB		= 0x09,
+	USB_CLS_CDC_DATA	= 0x0a,
+	USB_CLS_SMARTCARD	= 0x0b,
+	USB_CLS_VIDEO		= 0x0e,
+	USB_CLS_HEALTHCARE	= 0x0f,
+	USB_CLS_AUDIOVIDEO	= 0x10,
+	USB_CLS_BILLBOARD	= 0x11,
+	USB_CLS_USB_C_BRIDGE	= 0x12,
+	USB_CLS_DIAGNOSTIC	= 0xdc,
+	USB_CLS_WIRELESS	= 0xe0,
+	USB_CLS_MISC		= 0xef,
+	USB_CLS_APP_SPECIFIC	= 0xfe,
+	USB_CLS_VENDOR_SPECIFIC	= 0xff,
+};
+
 struct usb_desc_hdr {
 	uint8_t  bLength;
 	uint8_t  bDescriptorType;
