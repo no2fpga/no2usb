@@ -163,3 +163,80 @@ struct usb_ac_as_ep_general_desc {
 #define USB_RT_AC_SET_RES_EP	((0x04 << 8) | 0x22)
 #define USB_RT_AC_GET_RES_EP	((0x84 << 8) | 0xa2)
 #define USB_RT_AC_GET_STAT_EP	((0xFF << 8) | 0xa2)
+
+
+/* Controls */
+
+enum usb_ac_terminal_control {
+	USB_AC_TE_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_TE_CONTROL_COPY_PROTECT		= 0x01,
+};
+
+enum usb_ac_feature_control {
+        USB_AC_FU_CONTROL_UNDEFINED		= 0x00,
+        USB_AC_FU_CONTROL_MUTE			= 0x01,
+        USB_AC_FU_CONTROL_VOLUME		= 0x02,
+        USB_AC_FU_CONTROL_BASS			= 0x03,
+        USB_AC_FU_CONTROL_MID			= 0x04,
+        USB_AC_FU_CONTROL_TREBLE		= 0x05,
+        USB_AC_FU_CONTROL_GRAPHIC_EQUALIZER	= 0x06,
+        USB_AC_FU_CONTROL_AUTOMATIC_GAIN	= 0x07,
+        USB_AC_FU_CONTROL_DELAY			= 0x08,
+        USB_AC_FU_CONTROL_BASS_BOOST		= 0x09,
+        USB_AC_FU_CONTROL_LOUDNESS		= 0x0A,
+};
+
+enum usb_ac_updown_control {
+	USB_AC_UD_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_UD_CONTROL_ENABLE		= 0x01,
+	USB_AC_UD_CONTROL_MODE_SELECT		= 0x02,
+};
+
+enum usb_ac_dolby_control {
+	USB_AC_DP_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_DP_CONTROL_ENABLE		= 0x01,
+	USB_AC_DP_CONTROL_MODE_SELECT		= 0x02,
+};
+
+enum usb_ac_3d_control {
+	USB_AC_3D_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_3D_CONTROL_ENABLE		= 0x01,
+	USB_AC_3D_CONTROL_SPACIOUSNESS		= 0x03,
+};
+
+enum usb_ac_reverb_control {
+	USB_AC_RV_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_RV_CONTROL_ENABLE		= 0x01,
+	USB_AC_RV_CONTROL_LEVEL			= 0x02,
+	USB_AC_RV_CONTROL_TIME			= 0x03,
+	USB_AC_RV_CONTROL_FEEDBACK		= 0x04,
+};
+
+enum usb_ac_chorus_control {
+	USB_AC_CH_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_CH_CONTROL_ENABLE		= 0x01,
+	USB_AC_CH_CONTROL_LEVEL			= 0x02,
+	USB_AC_CH_CONTROL_RATE			= 0x03,
+	USB_AC_CH_CONTROL_DEPTH			= 0x04,
+};
+
+enum usb_ac_dynrange_control {
+	USB_AC_DR_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_DR_CONTROL_ENABLE		= 0x01,
+	USB_AC_DR_CONTROL_COMPRESSION_RATE	= 0x02,
+	USB_AC_DR_CONTROL_MAXAMPL		= 0x03,
+	USB_AC_DR_CONTROL_THRESHOLD		= 0x04,
+	USB_AC_DR_CONTROL_ATTACK_TIME		= 0x05,
+	USB_AC_DR_CONTROL_RELEASE_TIME		= 0x06,
+};
+
+enum usb_ac_extension_control {
+	USB_AC_XU_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_XU_CONTROL_ENABLE		= 0x01,
+};
+
+enum usb_ac_vs_endpoint_control {
+	USB_AC_VS_EP_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_VS_EP_CONTROL_SAMPLING_FREQ	= 0x01,
+	USB_AC_VS_EP_CONTROL_PITCH		= 0x02,
+};
