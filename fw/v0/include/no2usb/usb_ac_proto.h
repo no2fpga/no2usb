@@ -111,6 +111,75 @@ struct usb_ac_as_fmt_type1_desc {
 } __attribute__ ((packed));
 
 
+/* MIDI Streaming Interfaces */
+
+enum usb_ac_ms_intf_desc_subtype {
+	USB_AC_MS_IDST_UNDEFINED	= 0x00,
+	USB_AC_MS_IDST_HEADER		= 0x01,
+	USB_AC_MS_IDST_MIDI_IN_JACK	= 0x02,
+	USB_AC_MS_IDST_MIDI_OUT_JACK	= 0x03,
+	USB_AC_MS_IDST_ELEMENT		= 0x04,
+};
+
+struct usb_ac_ms_hdr_desc {
+	uint8_t  bLength;
+	uint8_t  bDescriptorType;
+	uint8_t  bDescriptorSubtype;
+	uint16_t bcdADC;
+	uint16_t wTotalLength;
+} __attribute__ ((packed));
+
+struct usb_ac_ms_in_jack_desc {
+	uint8_t  bLength;
+	uint8_t  bDescriptorType;
+	uint8_t  bDescriptorSubtype;
+	uint8_t  bJackType;
+	uint8_t  bJackID;
+	uint8_t  iJack;
+} __attribute__ ((packed));
+
+struct usb_ac_ms_out_jack_desc_hdr {
+	uint8_t  bLength;
+	uint8_t  bDescriptorType;
+	uint8_t  bDescriptorSubtype;
+	uint8_t  bJackType;
+	uint8_t  bJackID;
+	uint8_t  bNrInputPins;
+} __attribute__ ((packed));
+
+struct usb_ac_ms_out_jack_desc_ftr {
+	uint8_t  iJack;
+} __attribute__ ((packed));
+
+struct usb_ac_ms_elem_desc_hdr {
+	uint8_t  bLength;
+	uint8_t  bDescriptorType;
+	uint8_t  bDescriptorSubtype;
+	uint8_t  bElementID;
+	uint8_t  bNrInputPins;
+} __attribute__ ((packed));
+
+struct usb_ac_ms_elem_desc_ftr {
+	uint8_t  bNrOutputPins;
+	uint8_t  bInTerminalLink;
+	uint8_t  bOutTerminalLink;
+	uint8_t  bElCapsSize;	/* Must be =2 since we fix bmElementCaps to uint16_t */
+	uint16_t bmElementCaps;	/* fixed to 16 bits */
+	uint8_t  iElement;
+} __attribute__ ((packed));
+
+struct usb_ac_ms_src_array {
+	uint8_t  baSourceID;
+	uint8_t  baSourcePin;
+} __attribute__ ((packed));
+
+enum usb_ac_ms_jack_types {
+	USB_AC_MS_JACK_TYPE_UNDEFINED	= 0x00,
+	USB_AC_MS_JACK_TYPE_EMBEDDED	= 0x01,
+	USB_AC_MS_JACK_TYPE_EXTERNAL	= 0x02,
+};
+
+
 /* Endpoints */
 
 enum usb_ac_ep_desc_subtype {
@@ -125,6 +194,14 @@ struct usb_ac_as_ep_general_desc {
 	uint8_t  bmAttributes;
 	uint8_t  bLockDelayUnits;
 	uint16_t wLockDelay;
+} __attribute__ ((packed));
+
+struct usb_ac_ms_ep_general_desc {
+	uint8_t  bLength;
+	uint8_t  bDescriptortype;
+	uint8_t  bDescriptorSubtype;
+	uint8_t  bNumEmbMIDIJack;
+	/* uint8_t  baAssocJackID[]; */
 } __attribute__ ((packed));
 
 
@@ -239,4 +316,9 @@ enum usb_ac_vs_endpoint_control {
 	USB_AC_VS_EP_CONTROL_UNDEFINED		= 0x00,
 	USB_AC_VS_EP_CONTROL_SAMPLING_FREQ	= 0x01,
 	USB_AC_VS_EP_CONTROL_PITCH		= 0x02,
+};
+
+enum usb_ac_ms_endpoint_control {
+	USB_AC_MS_EP_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_MS_EP_CONTROL_ASSOCIATION	= 0x01,
 };
