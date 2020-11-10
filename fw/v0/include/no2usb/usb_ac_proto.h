@@ -22,16 +22,16 @@ enum usb_ac_subclass {
 
 /* Audio Control Interfaces */
 
-enum usb_ac_ac_desc_subtype {
-	USB_AC_DST_AC_UNDEFINED		= 0x00,
-	USB_AC_DST_AC_HEADER		= 0x01,
-	USB_AC_DST_AC_INPUT_TERMINAL	= 0x02,
-	USB_AC_DST_AC_OUTPUT_TERMINAL	= 0x03,
-	USB_AC_DST_AC_MIXER_UNIT	= 0x04,
-	USB_AC_DST_AC_SELECTOR_UNIT	= 0x05,
-	USB_AC_DST_AC_FEATURE_UNIT	= 0x06,
-	USB_AC_DST_AC_PROCESSING_UNIT	= 0x07,
-	USB_AC_DST_AC_EXTENSION_UNIT	= 0x08,
+enum usb_ac_ac_intf_desc_subtype {
+	USB_AC_AC_IDST_UNDEFINED	= 0x00,
+	USB_AC_AC_IDST_HEADER		= 0x01,
+	USB_AC_AC_IDST_INPUT_TERMINAL	= 0x02,
+	USB_AC_AC_IDST_OUTPUT_TERMINAL	= 0x03,
+	USB_AC_AC_IDST_MIXER_UNIT	= 0x04,
+	USB_AC_AC_IDST_SELECTOR_UNIT	= 0x05,
+	USB_AC_AC_IDST_FEATURE_UNIT	= 0x06,
+	USB_AC_AC_IDST_PROCESSING_UNIT	= 0x07,
+	USB_AC_AC_IDST_EXTENSION_UNIT	= 0x08,
 };
 
 struct usb_ac_ac_hdr_desc {
@@ -82,11 +82,11 @@ struct usb_ac_ac_feat_desc {
 
 /* Audio Streaming Interfaces */
 
-enum usb_ac_as_desc_subtype {
-	USB_AC_DST_AS_UNDEFINED		= 0x00,
-	USB_AC_DST_AS_GENERAL		= 0x01,
-	USB_AC_DST_AS_FORMAT_TYPE	= 0x02,
-	USB_AC_DST_AS_FORMAT_SPECIFIC	= 0x03,
+enum usb_ac_as_intf_desc_subtype {
+	USB_AC_AS_IDST_UNDEFINED	= 0x00,
+	USB_AC_AS_IDST_GENERAL		= 0x01,
+	USB_AC_AS_IDST_FORMAT_TYPE	= 0x02,
+	USB_AC_AS_IDST_FORMAT_SPECIFIC	= 0x03,
 };
 
 struct usb_ac_as_general_desc {
@@ -114,11 +114,11 @@ struct usb_ac_as_fmt_type1_desc {
 /* Endpoints */
 
 enum usb_ac_ep_desc_subtype {
-	USB_AC_DST_EP_UNDEFINED		= 0x00,
-	USB_AC_DST_EP_GENERAL		= 0x01,
+	USB_AC_EDST_UNDEFINED	= 0x00,
+	USB_AC_EDST_GENERAL	= 0x01,
 };
 
-struct usb_ac_ep_general_desc {
+struct usb_ac_as_ep_general_desc {
 	uint8_t  bLength;
 	uint8_t  bDescriptortype;
 	uint8_t  bDescriptorSubtype;
