@@ -12,9 +12,14 @@
 module usb_phy #(
 	parameter TARGET = "ICE40"
 )(
-	// Pads
-	inout  wire pad_dp,
-	inout  wire pad_dn,
+	// IO interface
+	input  wire pad_dp_i,
+	output reg  pad_dp_o,
+	output reg  pad_dp_oe,
+
+	input  wire pad_dn_i,
+	output reg  pad_dn_o,
+	output reg  pad_dn_oe,
 
 	// RX
 	output wire rx_dp,
@@ -31,105 +36,27 @@ module usb_phy #(
 	input  wire rst
 );
 
-	wire [1:0] rx_dp_i;
-	wire [1:0] rx_dn_i;
-	reg  [2:0] dp_state;
-	reg  [2:0] dn_state;
+	reg  [2:0] rx_dp_i;
+	reg  [2:0] rx_dn_i;
 
-	// IO buffers
-	generate
-		if (TARGET == "ICE40") begin
-
-			SB_IO #(
-				.PIN_TYPE(6'b110100),
-				.PULLUP(1'b0),
-				.NEG_TRIGGER(1'b0),
-				.IO_STANDARD("SB_LVCMOS")
-			) io_dp_I (
-				.PACKAGE_PIN(pad_dp),
-				.LATCH_INPUT_VALUE(1'b0),
-				.CLOCK_ENABLE(1'b1),
-				.INPUT_CLK(clk),
-				.OUTPUT_CLK(clk),
-				.OUTPUT_ENABLE(tx_en),
-				.D_OUT_0(tx_dp),
-				.D_OUT_1(1'b0),
-				.D_IN_0(rx_dp_i[0]),
-				.D_IN_1(rx_dp_i[1])
-			);
-
-			SB_IO #(
-				.PIN_TYPE(6'b110100),
-				.PULLUP(1'b0),
-				.NEG_TRIGGER(1'b0),
-				.IO_STANDARD("SB_LVCMOS")
-			) io_dn_I (
-				.PACKAGE_PIN(pad_dn),
-				.LATCH_INPUT_VALUE(1'b0),
-				.CLOCK_ENABLE(1'b1),
-				.INPUT_CLK(clk),
-				.OUTPUT_CLK(clk),
-				.OUTPUT_ENABLE(tx_en),
-				.D_OUT_0(tx_dn),
-				.D_OUT_1(1'b0),
-				.D_IN_0(rx_dn_i[0]),
-				.D_IN_1(rx_dn_i[1])
-			);
-
-		end
-	endgenerate
-
-	// Input sync, filter and change detect
-	always @(posedge clk or posedge rst)
+	// Output registers
+	always @(posedge clk)
 	begin
-		if (rst) begin
-			dp_state <= 3'b000;
-			dn_state <= 3'b000;
-		end else begin
-			case ({dp_state[1:0], rx_dp_i})
-				4'b0000: dp_state <= 3'b000;
-				4'b0001: dp_state <= 3'b001;
-				4'b0010: dp_state <= 3'b001;
-				4'b0011: dp_state <= 3'b001;
-				4'b0100: dp_state <= 3'b000;
-				4'b0101: dp_state <= 3'b001;
-				4'b0110: dp_state <= 3'b001;
-				4'b0111: dp_state <= 3'b111;
-				4'b1000: dp_state <= 3'b100;
-				4'b1001: dp_state <= 3'b010;
-				4'b1010: dp_state <= 3'b010;
-				4'b1011: dp_state <= 3'b011;
-				4'b1100: dp_state <= 3'b010;
-				4'b1101: dp_state <= 3'b010;
-				4'b1110: dp_state <= 3'b010;
-				4'b1111: dp_state <= 3'b011;
-				default: dp_state <= 3'bxxx;
-			endcase
-
-			case ({dn_state[1:0], rx_dn_i})
-				4'b0000: dn_state <= 3'b000;
-				4'b0001: dn_state <= 3'b001;
-				4'b0010: dn_state <= 3'b001;
-				4'b0011: dn_state <= 3'b001;
-				4'b0100: dn_state <= 3'b000;
-				4'b0101: dn_state <= 3'b001;
-				4'b0110: dn_state <= 3'b001;
-				4'b0111: dn_state <= 3'b111;
-				4'b1000: dn_state <= 3'b100;
-				4'b1001: dn_state <= 3'b010;
-				4'b1010: dn_state <= 3'b010;
-				4'b1011: dn_state <= 3'b011;
-				4'b1100: dn_state <= 3'b010;
-				4'b1101: dn_state <= 3'b010;
-				4'b1110: dn_state <= 3'b010;
-				4'b1111: dn_state <= 3'b011;
-				default: dn_state <= 3'bxxx;
-			endcase
-		end
+		pad_dp_o  <= tx_dp;
+		pad_dp_oe <= tx_en;
+		pad_dn_o  <= tx_dn;
+		pad_dn_oe <= tx_en;
 	end
 
-	assign rx_dp  = dp_state[1];
-	assign rx_dn  = dn_state[1];
-	assign rx_chg = dp_state[2] | dn_state[2];
+	// Input register / synchronizer
+	always @(posedge clk)
+	begin
+		rx_dp_i <= { rx_dp_i[1:0], pad_dp_i };
+		rx_dn_i <= { rx_dn_i[1:0], pad_dn_i };
+	end
+
+	assign rx_dp  = rx_dp_i[1];
+	assign rx_dn  = rx_dn_i[1];
+	assign rx_chg = ^rx_dp_i[2:1] | ^rx_dn_i[2:1];
 
 endmodule // usb_phy

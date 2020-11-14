@@ -17,10 +17,17 @@ module usb #(
 	/* Auto-set */
 	parameter integer EPAW = 11 - $clog2(EPDW / 8)
 )(
-	// Pads
-	inout  wire pad_dp,
-	inout  wire pad_dn,
-	output reg  pad_pu,
+	// IO interface
+	input  wire pad_dp_i,
+	output wire pad_dp_o,
+	output wire pad_dp_oe,
+
+	input  wire pad_dn_i,
+	output wire pad_dn_o,
+	output wire pad_dn_oe,
+
+	output wire pad_pu_o,
+	output reg  pad_pu_oe,
 
 	// EP buffer interface
 	input  wire [EPAW-1:0] ep_tx_addr_0,
@@ -184,8 +191,12 @@ module usb #(
 	usb_phy #(
 		.TARGET(TARGET)
 	) phy_I (
-		.pad_dp(pad_dp),
-		.pad_dn(pad_dn),
+		.pad_dp_i(pad_dp_i),
+		.pad_dp_o(pad_dp_o),
+		.pad_dp_oe(pad_dp_oe),
+		.pad_dn_i(pad_dn_i),
+		.pad_dn_o(pad_dn_o),
+		.pad_dn_oe(pad_dn_oe),
 		.rx_dp(phy_rx_dp),
 		.rx_dn(phy_rx_dn),
 		.rx_chg(phy_rx_chg),
@@ -593,9 +604,11 @@ module usb #(
 	// Detection pin
 	always @(posedge clk)
 		if (rst)
-			pad_pu <= 1'b0;
+			pad_pu_oe <= 1'b0;
 		else
-			pad_pu <= cr_pu_ena;
+			pad_pu_oe <= cr_pu_ena;
+
+	assign pad_pu_o = 1'b1;
 
 
 	// Misc
