@@ -11,11 +11,11 @@
 
 module usb #(
 	parameter         TARGET = "ICE40",
-	parameter integer EPDW = 16,
+	parameter integer EPDW = 32,
 	parameter integer EVT_DEPTH = 0,
 
 	/* Auto-set */
-	parameter integer EPAW = 11 - $clog2(EPDW / 8)
+	parameter integer EPAW = 10 - $clog2(EPDW / 8)
 )(
 	// IO interface
 	input  wire pad_dp_i,
@@ -341,9 +341,10 @@ module usb #(
 	usb_ep_buf #(
 		.TARGET(TARGET),
 		.RWIDTH(8),
-		.WWIDTH(EPDW)
+		.WWIDTH(EPDW),
+		.AWIDTH(10)
 	) tx_buf_I (
-		.rd_addr_0(buf_tx_addr_0),
+		.rd_addr_0(buf_tx_addr_0[9:0]),
 		.rd_data_1(buf_tx_data_1),
 		.rd_en_0(buf_tx_rden_0),
 		.rd_clk(clk),
@@ -356,13 +357,14 @@ module usb #(
 	usb_ep_buf #(
 		.TARGET(TARGET),
 		.RWIDTH(EPDW),
-		.WWIDTH(8)
+		.WWIDTH(8),
+		.AWIDTH(10)
 	) rx_buf_I (
 		.rd_addr_0(ep_rx_addr_0),
 		.rd_data_1(ep_rx_data_1),
 		.rd_en_0(ep_rx_re_0),
 		.rd_clk(ep_clk),
-		.wr_addr_0(buf_rx_addr_0),
+		.wr_addr_0(buf_rx_addr_0[9:0]),
 		.wr_data_0(buf_rx_data_0),
 		.wr_en_0(buf_rx_wren_0),
 		.wr_clk(clk)
