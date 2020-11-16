@@ -57,6 +57,10 @@ module usb_trans #(
 	output wire [15:0] eps_wrdata_0,
 	input  wire [15:0] eps_rddata_3,
 
+	// Microcode
+	output wire [ 7:0] mcrom_addr_0,
+	input  wire [15:0] mcrom_data_1,
+
 	// Config / Status
 	input  wire cr_addr_chk,
 	input  wire [ 6:0] cr_addr,
@@ -179,23 +183,8 @@ module usb_trans #(
 			mc_pc_nxt <= mc_pc + 1;
 
 	// Microcode ROM
-	SB_RAM40_4K #(
-		.INIT_FILE("usb_trans_mc.hex"),
-		.WRITE_MODE(0),
-		.READ_MODE(0)
-	) mc_rom_I (
-		.RDATA(mc_opcode),
-		.RADDR({3'b000, mc_pc}),
-		.RCLK(clk),
-		.RCLKE(1'b1),
-		.RE(1'b1),
-		.WDATA(16'h0000),
-		.WADDR(11'h000),
-		.MASK(16'h0000),
-		.WCLK(1'b0),
-		.WCLKE(1'b0),
-		.WE(1'b0)
-	);
+	assign mcrom_addr_0 = mc_pc;
+	assign mc_opcode = mcrom_data_1;
 
 	// Decode opcodes
 	assign mc_op_ld      = mc_opcode[15:12] == 4'b0001;

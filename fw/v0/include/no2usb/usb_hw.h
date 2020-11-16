@@ -77,3 +77,4 @@ struct usb_ep_pair {
 
 static volatile struct usb_core *    const usb_regs    = (void*) (USB_CORE_BASE);
 static volatile struct usb_ep_pair * const usb_ep_regs = (void*)((USB_CORE_BASE) + (1 << 13));
+static volatile uint32_t *           const usb_ucode   = (void*)((USB_CORE_BASE) + (1 << 13) + (1 << 10));

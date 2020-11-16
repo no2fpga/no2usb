@@ -15,6 +15,8 @@
 
 #include "console.h"
 
+#include "ucode.h"
+
 
 /* Main stack state */
 struct usb_stack g_usb;
@@ -323,6 +325,10 @@ _usb_hw_reset_ep(volatile struct usb_ep *ep)
 static void
 _usb_hw_reset(bool pu)
 {
+	/* Load ucode */
+	for (int i=0; i<sizeof(ucode)/sizeof(uint16_t); i++)
+		usb_ucode[i] = ucode[i];
+
 	/* Clear all descriptors */
 	for (int i=0; i<16; i++) {
 		_usb_hw_reset_ep(&usb_ep_regs[i].out);

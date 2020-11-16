@@ -135,6 +135,10 @@ module usb #(
 	reg  eps_bus_write;
 	wire [15:0] eps_bus_dout;
 
+	// Microcode ROM
+	wire [ 7:0] mcrom_addr_0;
+	wire [15:0] mcrom_data_1;
+
 	// Config / Status registers
 	reg  cr_pu_ena;
 	reg  cr_cel_ena;
@@ -323,6 +327,8 @@ module usb #(
 		.eps_addr_0(eps_addr_0),
 		.eps_wrdata_0(eps_wrdata_0),
 		.eps_rddata_3(eps_rddata_3),
+		.mcrom_addr_0(mcrom_addr_0),
+		.mcrom_data_1(mcrom_data_1),
 		.cr_addr_chk(cr_addr_chk),
 		.cr_addr(cr_addr),
 		.evt_data(evt_data),
@@ -375,19 +381,21 @@ module usb #(
 	// ------------------------------
 
 	usb_ep_status ep_status_I (
-		.p_addr_0(eps_addr_0),
+		.p_addr_0({1'b0, eps_addr_0}),
 		.p_read_0(eps_read_0),
 		.p_zero_0(eps_zero_0),
 		.p_write_0(eps_write_0),
 		.p_din_0(eps_wrdata_0),
 		.p_dout_3(eps_rddata_3),
-		.s_addr_0(wb_addr[7:0]),
+		.s_addr_0(wb_addr[8:0]),
 		.s_read_0(eps_bus_ready),
 		.s_zero_0(eps_bus_zero),
 		.s_write_0(eps_bus_write),
 		.s_din_0(wb_wdata),
 		.s_dout_3(eps_bus_dout),
 		.s_ready_0(eps_bus_ready),
+		.rom_addr_0(mcrom_addr_0),
+		.rom_data_1(mcrom_data_1),
 		.clk(clk),
 		.rst(rst)
 	);
