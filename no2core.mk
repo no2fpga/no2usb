@@ -13,6 +13,7 @@ RTL_SRCS_no2usb := $(addprefix rtl/, \
 	usb_trans.v \
 	usb_tx_ll.v \
 	usb_tx_pkt.v \
+	usb_sky130.v \
 )
 
 PREREQ_no2usb = \
