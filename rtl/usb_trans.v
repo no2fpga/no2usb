@@ -62,6 +62,7 @@ module usb_trans #(
 	input  wire [15:0] mcrom_data_1,
 
 	// Config / Status
+	input  wire cr_run,
 	input  wire cr_addr_chk,
 	input  wire [ 6:0] cr_addr,
 
@@ -163,8 +164,8 @@ module usb_trans #(
 	// ---------------------------
 
 	// Local reset to avoid being in the critical path
-	always @(posedge clk or posedge rst)
-		if (rst)
+	always @(posedge clk)
+		if (~cr_run)
 			mc_rst_n <= 1'b0;
 		else
 			mc_rst_n <= 1'b1;
@@ -176,15 +177,12 @@ module usb_trans #(
 	assign mc_pc = mc_jmp ? {mc_opcode[13:8], 2'b00} : mc_pc_nxt;
 
 	// Program counter
-	always @(posedge clk or posedge rst)
-		if (rst)
-			mc_pc_nxt <= 8'h00;
-		else
-			mc_pc_nxt <= mc_pc + 1;
+	always @(posedge clk)
+		mc_pc_nxt <= (mc_pc + 1) & { 8{mc_rst_n} };
 
 	// Microcode ROM
 	assign mcrom_addr_0 = mc_pc;
-	assign mc_opcode = mcrom_data_1;
+	assign mc_opcode = { (mc_rst_n ? mcrom_data_1[15:12] : 4'h0), mcrom_data_1[11:0] };
 
 	// Decode opcodes
 	assign mc_op_ld      = mc_opcode[15:12] == 4'b0001;

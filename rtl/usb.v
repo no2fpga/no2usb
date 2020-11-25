@@ -329,6 +329,7 @@ module usb #(
 		.eps_rddata_3(eps_rddata_3),
 		.mcrom_addr_0(mcrom_addr_0),
 		.mcrom_data_1(mcrom_data_1),
+		.cr_run(cr_pu_ena),
 		.cr_addr_chk(cr_addr_chk),
 		.cr_addr(cr_addr),
 		.evt_data(evt_data),
