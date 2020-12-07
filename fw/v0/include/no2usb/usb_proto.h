@@ -80,6 +80,12 @@ struct usb_desc_hdr {
 	uint8_t  bDescriptorType;
 } __attribute__((packed));
 
+struct usb_desc_hdr2 {
+	uint8_t  bLength;
+	uint8_t  bDescriptorType;
+	uint8_t  bDescriptorSubtype;
+} __attribute__((packed));
+
 struct usb_dev_desc {
 	uint8_t  bLength;
 	uint8_t  bDescriptorType;
