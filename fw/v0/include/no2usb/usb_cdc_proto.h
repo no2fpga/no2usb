@@ -61,10 +61,14 @@ struct usb_cdc_acm_desc {
 	uint8_t  bmCapabilities;
 } __attribute__((packed));
 
-struct usb_cdc_union_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bDescriptorsubtype;
-	uint8_t  bMasterInterface;
-	/* uint8_t  bSlaveInterface[]; */
-} __attribute__((packed));
+#define usb_cdc_union_desc_def(n) \
+	struct usb_cdc_union_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptorType; \
+		uint8_t  bDescriptorsubtype; \
+		uint8_t  bMasterInterface; \
+		uint8_t  bSlaveInterface[n]; \
+	} __attribute__((packed))
+
+usb_cdc_union_desc_def(0);
+#define usb_cdc_union_desc usb_cdc_union_desc__0

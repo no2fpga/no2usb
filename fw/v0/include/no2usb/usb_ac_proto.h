@@ -34,15 +34,19 @@ enum usb_ac_ac_intf_desc_subtype {
 	USB_AC_AC_IDST_EXTENSION_UNIT	= 0x08,
 };
 
-struct usb_ac_ac_hdr_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bDescriptorSubtype;
-	uint16_t bcdADC;
-	uint16_t wTotalLength;
-	uint8_t  bInCollection;
-	/* uint8_t  baInterfaceNr[]; */
-} __attribute__ ((packed));
+#define usb_ac_ac_hdr_desc_def(n) \
+	struct usb_ac_ac_hdr_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptorType; \
+		uint8_t  bDescriptorSubtype; \
+		uint16_t bcdADC; \
+		uint16_t wTotalLength; \
+		uint8_t  bInCollection; \
+		uint8_t  baInterfaceNr[n]; \
+	} __attribute__ ((packed))
+
+usb_ac_ac_hdr_desc_def(0);
+#define usb_ac_ac_hdr_desc usb_ac_ac_hdr_desc_def__0
 
 struct usb_ac_ac_input_desc {
 	uint8_t  bLength;
@@ -68,16 +72,89 @@ struct usb_ac_ac_output_desc {
 	uint8_t  iTerminal;
 } __attribute__ ((packed));
 
-struct usb_ac_ac_feat_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptortype;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bUnitID;
-	uint8_t  bSourceID;
-	uint8_t  bControlSize;
-	/* uint8_t  bmaControls[]; */
-	/* uint8_t  iTerminal; */
-} __attribute__ ((packed));
+#define usb_ac_ac_mixer_desc_def(n, m) \
+	struct usb_ac_ac_mixer_desc__ ## n ## _ ## m { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bUnitID; \
+		uint8_t  bNrInPins; \
+		uint8_t  baSourceID[n]; \
+		uint8_t  bNrChannels; \
+		uint16_t wChannelConfig; \
+		uint8_t  iChannelNames; \
+		uint8_t  bmControls[m]; \
+		uint8_t  iMixer \
+	} __attribute__ ((packed))
+
+#define usb_ac_ac_selector_desc_def(n) \
+	struct usb_ac_ac_selector_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bUnitID; \
+		uint8_t  bNrInPins; \
+		uint8_t  baSourceID[n]; \
+		uint8_t  iSelector; \
+	} __attribute__ ((packed))
+
+#define usb_ac_ac_feature_desc_def(n) \
+	struct usb_ac_ac_feature_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bUnitID; \
+		uint8_t  bSourceID; \
+		uint8_t  bControlSize; \
+		uint8_t  bmaControls[n]; \
+		uint8_t  iTerminal; \
+	} __attribute__ ((packed))
+
+#define usb_ac_ac_processing_common_desc_def(n, m) \
+	struct usb_ac_ac_processing_common_desc__ ## n ## _ ## m { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bUnitID; \
+		uint16_t wProcessType; \
+		uint8_t  bNrInPins; \
+		uint8_t  baSourceID[n]; \
+		uint8_t  bNrChannels; \
+		uint16_t wChannelConfig; \
+		uint8_t  iChannelNames; \
+		uint8_t  bControlSize; \
+		uint8_t  bmControls[m]; \
+		uint8_t  iProcessing; \
+	} __attribute__ ((packed))
+
+#define usb_ac_ac_processing_updown_desc_def(n) \
+	struct usb_ac_ac_processing_updown_desc__ ## n { \
+		uint8_t  bNrModes; \
+		uint16_t waModes; \
+	} __attribute__ ((packed))
+
+#define usb_ac_ac_processing_dolby_desc_def(n) \
+	struct usb_ac_ac_processing_dolby_desc__ ## n { \
+		uint8_t  bNrModes; \
+		uint16_t waModes; \
+	} __attribute__ ((packed))
+
+#define usb_ac_ac_extension_desc_def(n, m) \
+	struct usb_ac_ac_extension_desc__ ## n ## _ ## m { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bUnitID; \
+		uint16_t wExtensionCode; \
+		uint8_t  bNrInPins; \
+		uint8_t  baSourceID[n]; \
+		uint8_t  bNrChannels; \
+		uint16_t wChannelConfig; \
+		uint8_t  iChannelNames; \
+		uint8_t  bControlSize; \
+		uint8_t  bmControls[m]; \
+		uint8_t  iExtension; \
+	} __attribute__ ((packed))
 
 
 /* Audio Streaming Interfaces */
@@ -98,17 +175,21 @@ struct usb_ac_as_general_desc {
 	uint16_t wFormatTag;
 } __attribute__ ((packed));
 
-struct usb_ac_as_fmt_type1_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptortype;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bFormatType;
-	uint8_t  bNrChannels;
-	uint8_t  bSubframeSize;
-	uint8_t  bBitResolution;
-	uint8_t  bSamFreqType;
-	/* uint8_t tSamFreq[]; */
-} __attribute__ ((packed));
+#define usb_ac_as_fmt_type1_desc_def(n) \
+	struct usb_ac_as_fmt_type1_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bFormatType; \
+		uint8_t  bNrChannels; \
+		uint8_t  bSubframeSize; \
+		uint8_t  bBitResolution; \
+		uint8_t  bSamFreqType; \
+		uint8_t tSamFreq[n];	/* 3 byte per frequency, uint24_t */ \
+	} __attribute__ ((packed))
+
+usb_ac_as_fmt_type1_desc_def(0);
+#define usb_ac_as_fmt_type1_desc usb_ac_as_fmt_type1_desc__0
 
 
 /* MIDI Streaming Interfaces */
@@ -138,40 +219,39 @@ struct usb_ac_ms_in_jack_desc {
 	uint8_t  iJack;
 } __attribute__ ((packed));
 
-struct usb_ac_ms_out_jack_desc_hdr {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bJackType;
-	uint8_t  bJackID;
-	uint8_t  bNrInputPins;
-} __attribute__ ((packed));
+#define usb_ac_ms_out_jack_desc_def(n) \
+	struct usb_ac_ms_out_jack_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptorType; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bJackType; \
+		uint8_t  bJackID; \
+		uint8_t  bNrInputPins; \
+		struct { \
+			uint8_t  baSourceID; \
+			uint8_t  baSourcePin; \
+		} __attribute__ ((packed)) sources[n]; \
+		uint8_t  iJack; \
+	} __attribute__ ((packed))
 
-struct usb_ac_ms_out_jack_desc_ftr {
-	uint8_t  iJack;
-} __attribute__ ((packed));
-
-struct usb_ac_ms_elem_desc_hdr {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bElementID;
-	uint8_t  bNrInputPins;
-} __attribute__ ((packed));
-
-struct usb_ac_ms_elem_desc_ftr {
-	uint8_t  bNrOutputPins;
-	uint8_t  bInTerminalLink;
-	uint8_t  bOutTerminalLink;
-	uint8_t  bElCapsSize;	/* Must be =2 since we fix bmElementCaps to uint16_t */
-	uint16_t bmElementCaps;	/* fixed to 16 bits */
-	uint8_t  iElement;
-} __attribute__ ((packed));
-
-struct usb_ac_ms_src_array {
-	uint8_t  baSourceID;
-	uint8_t  baSourcePin;
-} __attribute__ ((packed));
+#define usb_ac_ms_elem_desc_def(n) \
+	struct usb_ac_ms_elem_desc { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptorType; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bElementID; \
+		uint8_t  bNrInputPins; \
+		struct { \
+			uint8_t  baSourceID; \
+			uint8_t  baSourcePin; \
+		} __attribute__ ((packed)) sources[n]; \
+		uint8_t  bNrOutputPins; \
+		uint8_t  bInTerminalLink; \
+		uint8_t  bOutTerminalLink; \
+		uint8_t  bElCapsSize;	/* Must be =2 since we fix bmElementCaps to uint16_t */ \
+		uint16_t bmElementCaps;	/* fixed to 16 bits */ \
+		uint8_t  iElement; \
+	} __attribute__ ((packed))
 
 enum usb_ac_ms_jack_types {
 	USB_AC_MS_JACK_TYPE_UNDEFINED	= 0x00,
@@ -196,13 +276,17 @@ struct usb_ac_as_ep_general_desc {
 	uint16_t wLockDelay;
 } __attribute__ ((packed));
 
-struct usb_ac_ms_ep_general_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptortype;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bNumEmbMIDIJack;
-	/* uint8_t  baAssocJackID[]; */
-} __attribute__ ((packed));
+#define usb_ac_ms_ep_general_desc_def(n) \
+	struct usb_ac_ms_ep_general_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bNumEmbMIDIJack; \
+		uint8_t  baAssocJackID[n]; \
+	} __attribute__ ((packed))
+
+usb_ac_ms_ep_general_desc_def(0);
+#define usb_ac_ms_ep_general_desc usb_ac_ms_ep_general_desc__0
 
 
 /* Control requests */

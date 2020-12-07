@@ -32,16 +32,20 @@ enum usb_vc_vc_intf_desc_subtype {
 	USB_VC_VC_IDST_EXTENSION_UNIT	= 0x06,
 };
 
-struct usb_vc_vc_hdr_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptorType;
-	uint8_t  bDescriptorSubtype;
-	uint16_t bcdUVC;
-	uint16_t wTotalLength;
-	uint32_t dwClockFrequency;
-	uint8_t  bInCollection;
-	/* uint8_t  baInterfaceNr[]; */
-} __attribute__ ((packed));
+#define usb_vc_vc_hdr_desc_def(n) \
+	struct usb_vc_vc_hdr_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptorType; \
+		uint8_t  bDescriptorSubtype; \
+		uint16_t bcdUVC; \
+		uint16_t wTotalLength; \
+		uint32_t dwClockFrequency; \
+		uint8_t  bInCollection; \
+		uint8_t  baInterfaceNr[n]; \
+	} __attribute__ ((packed))
+
+usb_vc_vc_hdr_desc_def(0);
+#define usb_vc_vc_hdr_desc usb_vc_vc_hdr_desc__0
 
 struct usb_vc_vc_input_desc {
 	uint8_t  bLength;
@@ -64,57 +68,64 @@ struct usb_vc_vc_output_desc {
 	uint8_t  iTerminal;
 } __attribute__ ((packed));
 
-struct usb_vc_vc_camera_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptortype;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bTerminalID;
-	uint16_t wTerminalType;
-	uint8_t  bAssocTerminal;
-	uint8_t  iTerminal;
-	uint16_t wObjectiveFocalLengthMin;
-	uint16_t wObjectiveFocalLengthMax;
-	uint16_t wObjectiveFocalLength;
-	uint8_t  bControlSize;
-	/* uint8_t  bmControls[]; */
-} __attribute__ ((packed));
+#define usb_vc_vc_camera_desc_def(n) \
+	struct usb_vc_vc_camera_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bTerminalID; \
+		uint16_t wTerminalType; \
+		uint8_t  bAssocTerminal; \
+		uint8_t  iTerminal; \
+		uint16_t wObjectiveFocalLengthMin; \
+		uint16_t wObjectiveFocalLengthMax; \
+		uint16_t wObjectiveFocalLength; \
+		uint8_t  bControlSize; \
+		uint8_t  bmControls[n]; \
+	} __attribute__ ((packed))
 
-struct usb_vc_vc_selector_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptortype;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bUnitID;
-	uint8_t  bNrInPins;
-	/* uint8_t  baSourceID[]; */
-	/* uint8_t  iSelector; */
-} __attribute__ ((packed));
+usb_vc_vc_camera_desc_def(0);
+#define usb_vc_vc_camera_desc usb_vc_vc_camera_desc__0
 
-struct usb_vc_vc_processing_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptortype;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bUnitID;
-	uint8_t  bSourceID;
-	uint16_t wMaxMultiplier;
-	uint8_t  bControlSize;
-	/* uint8_t  bmControls[]; */
-	/* uint8_t  iProcessing; */
-	/* uint8_t  bmProcessingStandards; */
-} __attribute__ ((packed));
+#define usb_vc_vc_selector_desc_def(n) \
+	struct usb_vc_vc_selector_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bUnitID; \
+		uint8_t  bNrInPins; \
+		uint8_t  baSourceID[n]; \
+		uint8_t  iSelector; \
+	} __attribute__ ((packed))
 
-struct usb_vc_vc_extension_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptortype;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bUnitID;
-	uint8_t  guidExtensionCode[16];
-	uint8_t  bNumControls;
-	uint8_t  bNrInPins;
-	/* uint8_t  baSourceID[]; */
-	/* uint8_t  bControlSize; */
-	/* uint8_t  bmControls[]; */
-	/* uint8_t  iExtension; */
-} __attribute__ ((packed));
+#define usb_vc_vc_processing_desc_def(n) \
+	struct usb_vc_vc_processing_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bUnitID; \
+		uint8_t  bSourceID; \
+		uint16_t wMaxMultiplier; \
+		uint8_t  bControlSize; \
+		uint8_t  bmControls[n]; \
+		uint8_t  iProcessing; \
+		uint8_t  bmProcessingStandards; \
+	} __attribute__ ((packed))
+
+#define usb_vc_vc_extension_desc_def(n,m) \
+	struct usb_vc_vc_extension_desc__ ## n ## _ ## m { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bUnitID; \
+		uint8_t  guidExtensionCode[16]; \
+		uint8_t  bNumControls; \
+		uint8_t  bNrInPins; \
+		uint8_t  baSourceID[n]; \
+		uint8_t  bControlSize; \
+		uint8_t  bmControls[m]; \
+		uint8_t  iExtension; \
+	} __attribute__ ((packed))
 
 
 /* Video Streaming Interfaces */
@@ -136,33 +147,41 @@ enum usb_vc_vs_intf_desc_subtype {
 	USB_VC_VS_IDST_FORMAT_STREAM_BASED	= 0x12,
 };
 
-struct usb_vc_vs_input_hdr_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptortype;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bNumFormats;
-	uint16_t wTotalLength;
-	uint8_t  bEndpointAddress;
-	uint8_t  bmInfo;
-	uint8_t  bTerminalLink;
-	uint8_t  bStillCaptureMethod;
-	uint8_t  bTriggerSupport;
-	uint8_t  bTriggerUsage;
-	uint8_t  bControlSize;
-	/* uint8_t  bmaControls[]; */
-} __attribute__ ((packed));
+#define usb_vc_vs_input_hdr_desc_def(n) \
+	struct usb_vc_vs_input_hdr_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bNumFormats; \
+		uint16_t wTotalLength; \
+		uint8_t  bEndpointAddress; \
+		uint8_t  bmInfo; \
+		uint8_t  bTerminalLink; \
+		uint8_t  bStillCaptureMethod; \
+		uint8_t  bTriggerSupport; \
+		uint8_t  bTriggerUsage; \
+		uint8_t  bControlSize; \
+		uint8_t  bmaControls[n]; \
+	} __attribute__ ((packed))
 
-struct usb_vc_vs_output_hdr_desc {
-	uint8_t  bLength;
-	uint8_t  bDescriptortype;
-	uint8_t  bDescriptorSubtype;
-	uint8_t  bNumFormats;
-	uint16_t wTotalLength;
-	uint8_t  bEndpointAddress;
-	uint8_t  bTerminalLink;
-	uint8_t  bControlSize;
-	/* uint8_t  bmaControls[]; */
-} __attribute__ ((packed));
+usb_vc_vs_input_hdr_desc_def(0);
+#define usb_vc_vs_input_hdr_desc usb_vc_vs_input_hdr_desc__0
+
+#define usb_vc_vs_output_hdr_desc_def(n) \
+	struct usb_vc_vs_output_hdr_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bNumFormats; \
+		uint16_t wTotalLength; \
+		uint8_t  bEndpointAddress; \
+		uint8_t  bTerminalLink; \
+		uint8_t  bControlSize; \
+		uint8_t  bmaControls[n]; \
+	} __attribute__ ((packed))
+
+usb_vc_vs_output_hdr_desc_def(0);
+#define usb_vc_vs_output_hdr_desc usb_vc_vs_output_hdr_desc_def__0
 
 struct usb_vc_vs_fmt_uncompressed_desc {
 	uint8_t  bLength;
@@ -191,18 +210,30 @@ struct usb_vc_vs_frame_uncompressed_desc {
 	uint32_t dwMaxBitRate;
 	uint32_t dwMaxVideoFrameBufferSize;
 	uint32_t dwDefaultFrameInterval;
-	uint8_t  bFrameIntervalType; /* 0=continuous, 1..255=# of intervals */
-	/*
-	union {
-		struct {
-			uint32_t dwMinFrameInterval;
-			uint32_t dwMaxFrameInterval;
-			uint32_t dwFrameIntervalStep;
-		};
-		uint32_t dwFrameInterval[];
-	};
-	*/
+	uint8_t  bFrameIntervalType; /* Set to 0 for continuous */
+	uint32_t dwMinFrameInterval;
+	uint32_t dwMaxFrameInterval;
+	uint32_t dwFrameIntervalStep;
 } __attribute__ ((packed));
+
+#define usb_vc_vs_frame_uncompressed_desc_def(n) \
+	struct usb_vc_vs_frame_uncompressed_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptortype; \
+		uint8_t  bDescriptorSubtype; \
+		uint8_t  bFrameIndex; \
+		uint8_t  bmCapabilities; \
+		uint16_t wWidth; \
+		uint16_t wHeight; \
+		uint32_t dwMinBitRate; \
+		uint32_t dwMaxBitRate; \
+		uint32_t dwMaxVideoFrameBufferSize; \
+		uint32_t dwDefaultFrameInterval; \
+		uint8_t  bFrameIntervalType; /* Set to 'n', the # of intervals */ \
+		uint32_t dwFrameInterval[n]; \
+	} __attribute__ ((packed))
+
+usb_vc_vs_frame_uncompressed_desc_def(0);
 
 
 /* Endpoints */
