@@ -9,6 +9,17 @@
 
 #pragma once
 
+
+enum usb_cdc_subclass {
+	USB_CDC_SCLS_DLCM	= 0x01,		/* Direct Line Control Model */
+	USB_CDC_SCLS_ACM	= 0x02,		/* Abstract Control Model */
+	USB_CDC_SCLS_TCM	= 0x03,		/* Telephone Control Model */
+	USB_CDC_SCLS_MCCM	= 0x04,		/* Multi-Channel Control Model */
+	USB_CDC_SCLS_CCM	= 0x05,		/* CAPI Control Model */
+	USB_CDC_SCLS_ENCM	= 0x06,		/* Ethernet Networking Control Model */
+	USB_CDC_SCLS_ANCM	= 0x07,		/* ATM Networking Control Model */
+};
+
 enum usb_cdc_desc_subtype {
 	USB_CDC_DST_HEADER	= 0x00,
 	USB_CDC_DST_CALL_MGMT	= 0x01,
