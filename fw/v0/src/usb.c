@@ -627,7 +627,7 @@ usb_ep_boot(const struct usb_intf_desc *intf, uint8_t ep_addr, bool dual_bd)
 	uint16_t wMaxPacketSize = 0;
 
 	/* Scan all alt config to find the max packet size for that EP */
-	eod = ((uint8_t*)intf) + conf->wTotalLength;
+	eod = ((uint8_t*)conf) + conf->wTotalLength;
 
 	for (intf_alt=intf;
 		(intf_alt != NULL) && (intf_alt->bInterfaceNumber == intf->bInterfaceNumber);
