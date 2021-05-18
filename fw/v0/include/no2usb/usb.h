@@ -104,6 +104,10 @@ bool usb_ep_is_halted(uint8_t ep);
 bool usb_ep_halt(uint8_t ep);
 bool usb_ep_resume(uint8_t ep);
 
+	/* EP config */
+bool usb_ep_reconf(const struct usb_intf_desc *intf, uint8_t ep_addr);
+bool usb_ep_boot(const struct usb_intf_desc *intf, uint8_t ep_addr, bool dual_bd);
+
 	/* Descriptors */
 const void *usb_desc_find(const void *sod, const void *eod, uint8_t dt);
 const void *usb_desc_next(const void *sod);
