@@ -11,6 +11,7 @@
 
 module usb_ep_buf #(
 	parameter TARGET = "ICE40",
+	parameter INIT_FILE = "",
 	parameter integer RWIDTH = 8,	// 8/16/32/64
 	parameter integer WWIDTH = 8,	// 8/16/32/64
 	parameter integer AWIDTH = 11,	// Assuming 'byte' access
@@ -43,6 +44,7 @@ module usb_ep_buf #(
 	endgenerate
 
 	ice40_ebr #(
+		.INIT_FILE  (INIT_FILE),
 		.READ_MODE  (4 - $clog2(RWIDTH)),
 		.WRITE_MODE (4 - $clog2(WWIDTH))
 	) ram_I (

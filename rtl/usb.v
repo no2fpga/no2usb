@@ -336,6 +336,7 @@ module usb #(
 
 	usb_ep_buf #(
 		.TARGET(TARGET),
+		.INIT_FILE("usb_txbuf.hex"),
 		.AWIDTH(9),
 		.RWIDTH(8),
 		.WWIDTH(EPDW)
@@ -353,6 +354,7 @@ module usb #(
 
 	usb_ep_buf #(
 		.TARGET(TARGET),
+		.INIT_FILE("usb_rxbuf.hex"),
 		.AWIDTH(9),
 		.RWIDTH(EPDW),
 		.WWIDTH(8)

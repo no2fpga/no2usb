@@ -83,9 +83,7 @@ module usb_ep_status (
 
 	// RAM element
 	SB_RAM40_4K #(
-`ifdef SIM
-		.INIT_FILE("usb_ep_status.hex"),
-`endif
+		.INIT_FILE("usb_ep.hex"),
 		.WRITE_MODE(0),
 		.READ_MODE(0)
 	) ebr_I (
