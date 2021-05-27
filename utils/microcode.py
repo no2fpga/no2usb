@@ -194,7 +194,9 @@ mc = [
 	L('DO_IN'),
 		# Check endpoint type
 		LD('ep_type'),
+IFNDEF('NO_ISOC'),
 		JEQ('DO_IN_ISOC', EP_TYPE_ISOC, EP_TYPE_MSK1),	# isochronous is special
+ENDIF(),
 		JEQ('IDLE', EP_TYPE_NONE, EP_TYPE_MSK1),		# endpoint doesn't exist, ignore packet
 
 
@@ -247,6 +249,7 @@ mc = [
 		# Isochronous
 		# - - - - - -
 
+IFNDEF('NO_ISOC'),
 	L('DO_IN_ISOC'),
 		# Anything to TX ?
 		LD('bd_state'),
@@ -271,6 +274,7 @@ mc = [
 		ZL(),
 		TX(PID_DATA0),
 		JMP('IDLE'),
+ENDIF(),
 
 
 	# SETUP Transactions
@@ -315,7 +319,9 @@ mc = [
 	L('DO_OUT'),
 		# Check endpoint type
 		LD('ep_type'),
+IFNDEF('NO_ISOC'),
 		JEQ('DO_OUT_ISOC', EP_TYPE_ISOC, EP_TYPE_MSK1),	# isochronous is special
+ENDIF(),
 		JEQ('IDLE', EP_TYPE_NONE, EP_TYPE_MSK1),		# endpoint doesn't exist, ignore packet
 
 
@@ -388,6 +394,7 @@ mc = [
 		# Isochronous
 		# - - - - - -
 
+IFNDEF('NO_ISOC'),
 	L('DO_OUT_ISOC'),
 		# Do we have space to RX ?
 		LD('bd_state'),
@@ -421,6 +428,7 @@ mc = [
 		# Notify host ?
 		# Discard
 		JMP('RX_DISCARD_NEXT'),
+ENDIF(),
 
 
 	# Common shared utility
