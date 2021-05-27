@@ -6,7 +6,7 @@
 # it's loaded as a json dict and indexed with the board name, with the
 # empty string being used as default value.
 #
-# Copyright (C) 2019-2020 Sylvain Munaut
+# Copyright (C) 2019-2021  Sylvain Munaut <tnt@246tNt.com>
 # SPDX-License-Identifier: MIT
 #
 

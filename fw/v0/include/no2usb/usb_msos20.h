@@ -1,7 +1,7 @@
 /*
  * usb_msos20.h
  *
- * Copyright (C) 2020  Sylvain Munaut <tnt@246tNt.com>
+ * Copyright (C) 2019-2021  Sylvain Munaut <tnt@246tNt.com>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 

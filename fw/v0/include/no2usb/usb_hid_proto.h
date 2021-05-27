@@ -3,7 +3,7 @@
  *
  * See USB Class Definitions for Human Interface Devices (HID), Revision 1.11
  *
- * Copyright (C) 2021  Sylvain Munaut <tnt@246tNt.com>
+ * Copyright (C) 2019-2021  Sylvain Munaut <tnt@246tNt.com>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
