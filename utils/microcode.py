@@ -488,10 +488,13 @@ ENDIF(),
 
 
 if __name__ == '__main__':
-	code, labels = assemble(mc)
+	opt_debug = 'debug' in sys.argv[1:]
+	opt_mini  = 'mini'  in sys.argv[1:]
+	defs = {'NO_ISOC', 'IGNORE_RX_ERR'} if opt_mini else {}
+	code, labels = assemble(mc, defs)
 	ilabel = dict([(v,k) for k,v in labels.items()])
 	for i, v in enumerate(code):
-		if (len(sys.argv) > 1) and (sys.argv[1] == 'debug'):
+		if opt_debug:
 			print("%02x %04x\t%s" % (i, v,ilabel.get(i,'')))
 		else:
 			print("%04x" % (v,))
