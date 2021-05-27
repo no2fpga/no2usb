@@ -173,6 +173,12 @@ mc = [
 	# Main loop
 	# ---------
 
+IFDEF('IGNORE_RX_ERR'),
+	L('_DO_SETUP_FAIL'),
+	L('_DO_OUT_BCI_FAIL'),
+	L('_DO_OUT_ISOC_FAIL'),
+ENDIF(),
+
 	L('IDLE'),
 		# Wait for an event we care about
 		LD('evt'),
@@ -307,10 +313,12 @@ ENDIF(),
 		JMP('TX_ACK'),
 
 		# Setup RX handler
+IFNDEF('IGNORE_RX_ERR'),
 	L('_DO_SETUP_FAIL'),
 		EP(bd_state=BD_DONE_ERR, bdi_flip=True, dt_flip=False, wb=True),
 		NOTIFY(NOTIFY_RX_FAIL),
 		JMP('IDLE'),
+ENDIF(),
 
 
 	# OUT Transactions
@@ -380,6 +388,7 @@ ENDIF(),
 		JMP('_DO_OUT_BCI_WAIT_DATA'),
 
 		# Fail hander: Packet reception failed
+IFNDEF('IGNORE_RX_ERR'),
 	L('_DO_OUT_BCI_FAIL'),
 			# Check we actually had a BD at all
 		LD('bd_state'),
@@ -389,6 +398,7 @@ ENDIF(),
 		EP(bd_state=BD_DONE_ERR, bdi_flip=True, dt_flip=False, wb=True),
 		NOTIFY(NOTIFY_RX_FAIL),
 		JMP('IDLE'),
+ENDIF(),
 
 
 		# Isochronous
@@ -418,10 +428,12 @@ IFNDEF('NO_ISOC'),
 		JMP('IDLE'),
 
 		# RX fail handler, mark error in the BD, notify host
+IFNDEF('IGNORE_RX_ERR'),
 	L('_DO_OUT_ISOC_FAIL'),
 		EP(bd_state=BD_DONE_ERR, bdi_flip=True, dt_flip=False, wb=True),
 		NOTIFY(NOTIFY_RX_FAIL),
 		JMP('IDLE'),
+ENDIF(),
 
 		# RX no-space handler, just discard packet :(
 	L('_DO_OUT_ISOC_NO_SPACE'),
