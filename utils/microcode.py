@@ -68,7 +68,7 @@ def JNE(tgt, cond_val=None, cond_mask=0xf):
 	return JMP(tgt, cond_val, cond_mask, cond_invert=True)
 
 def L(label):
-	return label
+	return ('label', label)
 
 
 #
@@ -79,11 +79,13 @@ def assemble(code):
 	flat_code = []
 	labels    = {}
 	for elem in code:
-		if isinstance(elem, str):
-			assert elem not in labels
-			while len(flat_code) & 3:
-				flat_code.append(JMP(elem))
-			labels[elem] = len(flat_code)
+		if isinstance(elem, tuple):
+			if elem[0] == 'label':
+				if active:
+					assert elem[1] not in labels
+					while len(flat_code) & 3:
+						flat_code.append(JMP(elem[1]))
+					labels[elem[1]] = len(flat_code)
 		else:
 			flat_code.append(elem)
 	for offset, elem in enumerate(flat_code):
