@@ -70,15 +70,29 @@ def JNE(tgt, cond_val=None, cond_mask=0xf):
 def L(label):
 	return ('label', label)
 
+def IFDEF(name):
+	return ('ifdef', name)
+
+def IFNDEF(name):
+	return ('ifndef', name)
+
+def ELSE():
+	return ('else',)
+
+def ENDIF():
+	return ('endif',)
+
 
 #
 # "Assembler"
 #
 
-def assemble(code):
+def assemble(code, defs={}):
 	flat_code = []
 	labels    = {}
+	condstack = []
 	for elem in code:
+		active = all(condstack)
 		if isinstance(elem, tuple):
 			if elem[0] == 'label':
 				if active:
@@ -86,7 +100,15 @@ def assemble(code):
 					while len(flat_code) & 3:
 						flat_code.append(JMP(elem[1]))
 					labels[elem[1]] = len(flat_code)
-		else:
+			elif elem[0] == 'ifdef':
+				condstack.append(elem[1] in defs)
+			elif elem[0] == 'ifndef':
+				condstack.append(elem[1] not in defs)
+			elif elem[0] == 'else':
+				condstack.append(not condstack.pop())
+			elif elem[0] == 'endif':
+				condstack.pop()
+		elif active:
 			flat_code.append(elem)
 	for offset, elem in enumerate(flat_code):
 		if isinstance(elem, types.LambdaType):
