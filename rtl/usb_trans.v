@@ -10,7 +10,11 @@
 `default_nettype none
 
 module usb_trans #(
-	parameter integer ADDR_MATCH = 1
+	parameter integer EP_BUF_SIZE = 11,
+	parameter integer ADDR_MATCH = 1,
+
+	// auto-set
+	parameter integer BL = EP_BUF_SIZE - 1
 )(
 	// TX Packet interface
 	output wire txpkt_start,
@@ -41,11 +45,11 @@ module usb_trans #(
 	input  wire rxpkt_data_stb,
 
 	// EP Data Buffers
-	output wire [10:0] buf_tx_addr_0,
+	output wire [BL:0] buf_tx_addr_0,
 	input  wire [ 7:0] buf_tx_data_1,
 	output wire buf_tx_rden_0,
 
-	output wire [10:0] buf_rx_addr_0,
+	output wire [BL:0] buf_rx_addr_0,
 	output wire [ 7:0] buf_rx_data_0,
 	output wire buf_rx_wren_0,
 
@@ -143,7 +147,7 @@ module usb_trans #(
 	reg  txpkt_start_i;
 
 	// Address
-	reg  [10:0] addr;
+	reg  [BL:0] addr;
 	wire addr_inc;
 	wire addr_ld;
 
@@ -412,7 +416,7 @@ module usb_trans #(
 
 	// Address
 	always @(posedge clk)
-		addr <= addr_ld ? eps_rddata_3[10:0] : (addr + addr_inc);
+		addr <= addr_ld ? eps_rddata_3[BL:0] : (addr + addr_inc);
 
 	assign addr_ld  = epfw_cap_dl[1:0] == 2'b11;
 	assign addr_inc = txpkt_data_ack | txpkt_start_i | rxpkt_data_stb;

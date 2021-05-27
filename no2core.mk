@@ -1,6 +1,6 @@
 CORE := no2usb
 
-DEPS_no2usb := no2misc
+DEPS_no2usb := no2misc no2ice40
 
 RTL_SRCS_no2usb := $(addprefix rtl/, \
 	usb.v \

@@ -11,11 +11,15 @@
 
 module usb #(
 	parameter         TARGET = "ICE40",
-	parameter integer EPDW = 16,
+	parameter integer EP_BUF_SIZE  = 11,
+	parameter integer EP_BUF_WIDTH = 16,
 	parameter integer EVT_DEPTH = 0,
 
 	/* Auto-set */
-	parameter integer EPAW = 11 - $clog2(EPDW / 8)
+	parameter integer EPDW = EP_BUF_WIDTH,
+	parameter integer EPMW = EP_BUF_WIDTH / 8,
+	parameter integer EPAW = EP_BUF_SIZE - $clog2(EP_BUF_WIDTH / 8),
+	parameter integer BL = EP_BUF_SIZE - 1
 )(
 	// Pads
 	inout  wire pad_dp,
@@ -25,6 +29,7 @@ module usb #(
 	// EP buffer interface
 	input  wire [EPAW-1:0] ep_tx_addr_0,
 	input  wire [EPDW-1:0] ep_tx_data_0,
+	input  wire [EPMW-1:0] ep_tx_wmsk_0,
 	input  wire ep_tx_we_0,
 
 	input  wire [EPAW-1:0] ep_rx_addr_0,
@@ -106,11 +111,11 @@ module usb #(
 	wire rxpkt_data_stb;
 
 	// EP Buffers
-	wire [10:0] buf_tx_addr_0;
+	wire [BL:0] buf_tx_addr_0;
 	wire [ 7:0] buf_tx_data_1;
 	wire buf_tx_rden_0;
 
-	wire [10:0] buf_rx_addr_0;
+	wire [BL:0] buf_rx_addr_0;
 	wire [ 7:0] buf_rx_data_0;
 	wire buf_rx_wren_0;
 
@@ -280,7 +285,9 @@ module usb #(
 	// Transaction control
 	// -------------------
 
-	usb_trans trans_I (
+	usb_trans #(
+		.EP_BUF_SIZE(EP_BUF_SIZE)
+	) trans_I (
 		.txpkt_start(txpkt_start),
 		.txpkt_done(txpkt_done),
 		.txpkt_pid(txpkt_pid),
@@ -329,6 +336,7 @@ module usb #(
 
 	usb_ep_buf #(
 		.TARGET(TARGET),
+		.AWIDTH(9),
 		.RWIDTH(8),
 		.WWIDTH(EPDW)
 	) tx_buf_I (
@@ -338,12 +346,14 @@ module usb #(
 		.rd_clk(clk),
 		.wr_addr_0(ep_tx_addr_0),
 		.wr_data_0(ep_tx_data_0),
+		.wr_mask_0(ep_tx_wmsk_0),
 		.wr_en_0(ep_tx_we_0),
 		.wr_clk(ep_clk)
 	);
 
 	usb_ep_buf #(
 		.TARGET(TARGET),
+		.AWIDTH(9),
 		.RWIDTH(EPDW),
 		.WWIDTH(8)
 	) rx_buf_I (
@@ -353,6 +363,7 @@ module usb #(
 		.rd_clk(ep_clk),
 		.wr_addr_0(buf_rx_addr_0),
 		.wr_data_0(buf_rx_data_0),
+		.wr_mask_0(1'b0),
 		.wr_en_0(buf_rx_wren_0),
 		.wr_clk(clk)
 	);
