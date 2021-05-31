@@ -257,13 +257,14 @@ _set_interface(struct usb_ctrl_req *req, struct usb_xfer *xfer)
 	if (intf_alt == NULL)
 		return false;
 
-	/* Disable fast path */
-	g_usb.intf_alt |= (1 << idx);
-
 	/* Dispatch enable */
 	rv = usb_dispatch_set_intf(intf_base, intf_alt);
 	if (rv != USB_FND_SUCCESS)
 		return false;
+
+	/* Disable fast path if (alt != 0) & success */
+	if (alt != 0)
+		g_usb.intf_alt |= (1 << idx);
 
 	return true;
 }
