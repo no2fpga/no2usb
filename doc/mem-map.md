@@ -96,6 +96,24 @@ Event format:
   * `b`: Buffer Descriptor index
 
 
+### IRQ Control (Read / Write addr `0x03`)
+
+```text
+,---------------------------------------------------------------,
+| f | e | d | c | b | a | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+|---------------------------------------------------------------|
+|                     /                 |sfp|evt|bsa|brr|bra|brp|
+'---------------------------------------------------------------'
+```
+
+  * `sfp` : IRQ on 'Start-of-Frame Pending' (`CSR.sfp`)
+  * `evt` : IRQ on 'Event pending' (`CSR.evt`)
+  * `bsa` : IRQ on 'Bus Suspend Asserted' (`CSR.bsa')
+  * `brr` : IRQ on 'Bus Reset Release' release (`CSR.brp & ~CSR.bra`)
+  * `bra` : IRQ on 'Bus Reset Asserted' (`CSR.bra`)
+  * `brp` : IRQ on 'Bus Reset Pending' (`CSR.brp`)
+
+
 EP Status
 ---------
 

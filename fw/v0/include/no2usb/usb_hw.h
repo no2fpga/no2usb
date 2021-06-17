@@ -16,6 +16,7 @@ struct usb_core {
 	uint32_t csr;
 	uint32_t ar;
 	uint32_t evt;
+	uint32_t ir;
 } __attribute__((packed,aligned(4)));
 
 #define USB_CSR_PU_ENA		(1 << 15)
@@ -32,6 +33,13 @@ struct usb_core {
 #define USB_AR_CEL_RELEASE	(1 << 13)
 #define USB_AR_BUS_RST_CLEAR	(1 <<  9)
 #define USB_AR_SOF_CLEAR	(1 <<  8)
+
+#define USB_IR_SOF_PENDING	(1 <<  5)
+#define USB_IR_EVT_PENDING	(1 <<  4)
+#define USB_IR_BUS_SUSPEND	(1 <<  3)
+#define USB_IR_BUS_RST_RELEASE	(1 <<  2)
+#define USB_IR_BUS_RST		(1 <<  1)
+#define USB_IR_BUS_RST_PENDING	(1 <<  0)
 
 
 struct usb_ep {
