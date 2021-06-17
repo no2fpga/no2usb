@@ -539,7 +539,7 @@ module usb #(
 			assign evt_rd_data = { ~ef_empty, ef_overflow, 2'b00, ef_rdata };
 			assign ef_rden = evt_rd_ack;
 
-			assign irq = ~ef_rden;
+			assign irq = ~ef_empty;
 
 			fifo_sync_shift #(
 				.DEPTH(EVT_DEPTH),
