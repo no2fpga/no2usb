@@ -13,8 +13,6 @@
 #include <no2usb/usb_dfu.h>
 #include <no2usb/usb_dfu_proto.h>
 
-#include "spi.h"
-
 
 #define DFU_VENDOR_PROTO
 #ifdef DFU_VENDOR_PROTO
