@@ -34,6 +34,15 @@ struct usb_core {
 #define USB_AR_BUS_RST_CLEAR	(1 <<  9)
 #define USB_AR_SOF_CLEAR	(1 <<  8)
 
+#define USB_EVT_VALID		(1 << 15)		/* FIFO mode only */
+#define USB_EVT_OVERFLOW	(1 << 14)		/* FIFO mode only */
+#define USB_EVT_GET_COUNT(x)	(((x) >> 12) & 0xf)	/* Count mode only */
+#define USB_EVT_GET_CODE(x)	(((x) >> 8) & 0xf)
+#define USB_EVT_GET_EP(x)	(((x) >> 4) & 0xf)
+#define USB_EVT_DIR_IN		(1 <<  3)
+#define USB_EVT_IS_SETUP	(1 <<  2)
+#define USB_EVT_BD_IDX		(1 <<  1)
+
 #define USB_IR_SOF_PENDING	(1 <<  5)
 #define USB_IR_EVT_PENDING	(1 <<  4)
 #define USB_IR_BUS_SUSPEND	(1 <<  3)
