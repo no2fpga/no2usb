@@ -279,7 +279,7 @@ _usb_ep_advance_xfer_in(const uint8_t epnum)
 			/* Advance the transfer, and maybe finish it */
 			eps->xfer.ofs += eps->xfer.plen;
 
-			if ((eps->xfer.ofs == eps->xfer.len) && (((eps->xfer.len % eps->mps) != 0) || ~eps->xfer.plen))
+			if (eps->xfer.ofs == eps->xfer.len)
 			{
 				len = eps->xfer.len;
 
