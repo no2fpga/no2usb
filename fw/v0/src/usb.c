@@ -417,7 +417,10 @@ usb_poll(void)
 	/* Check for activity */
 	if (!(csr & USB_CSR_EVT_PENDING))
 		return;
-	csr = usb_regs->evt;
+
+	do {
+		csr = usb_regs->evt;
+	} while (usb_regs->csr & USB_CSR_EVT_PENDING);
 
 	/* Poll EP0 (control) */
 	usb_ep0_poll();
