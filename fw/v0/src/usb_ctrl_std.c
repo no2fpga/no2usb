@@ -185,6 +185,9 @@ _set_configuration(struct usb_ctrl_req *req, struct usb_xfer *xfer)
 	const struct usb_conf_desc *conf = NULL;
 	enum usb_dev_state new_state;
 
+	const struct usb_intf_desc *intf;
+	const void *sod, *eod;
+
 	/* Handle the 'zero' case first */
 	if (req->wValue == 0) {
 		new_state = USB_DS_DEFAULT;
@@ -208,6 +211,22 @@ _set_configuration(struct usb_ctrl_req *req, struct usb_xfer *xfer)
 	g_usb.intf_alt = 0;
 	usb_set_state(new_state);
 	usb_dispatch_set_conf(g_usb.conf);
+
+	/* Dispatch implicit set_interface alt 0 */
+	sod = conf;
+	eod = sod + conf->wTotalLength;
+
+	while (1) {
+		sod = usb_desc_find(sod, eod, USB_DT_INTF);
+		if (!sod)
+			break;
+
+		intf = (void*)sod;
+		if (intf->bAlternateSetting == 0)
+			usb_dispatch_set_intf(intf, intf);
+
+		sod = usb_desc_next(sod);
+	}
 
 	return true;
 }
