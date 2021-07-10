@@ -29,7 +29,7 @@
 #define L_TRACE 3
 #define L_EXTRA 4
 
-//#define DEBUG_LVL L_TRACE
+#define DEBUG_LVL L_NONE
 
 #if DEBUG_LVL > 0
 
