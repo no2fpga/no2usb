@@ -236,7 +236,7 @@ _get_interface(struct usb_ctrl_req *req, struct usb_xfer *xfer)
 {
 	const struct usb_intf_desc *intf;
 	uint8_t idx = req->wIndex;
-	uint8_t alt = req->wValue;
+	uint8_t alt = 0;
 	enum usb_fnd_resp rv;
 
 	/* Check interface exits */
