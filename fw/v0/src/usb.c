@@ -276,7 +276,7 @@ usb_debug_print_data(int ofs, int len)
 
 	for (i=0; i<len; i++) {
 		_fast_print_hex(*data++);
-		putchar((((i & 3) == 3) | (i == (len-1))) ? '\n' : ' ');
+		puts((((i & 3) == 3) | (i == (len-1))) ? "\n" : " ");
 	}
 	puts("\n");
 }
@@ -295,7 +295,7 @@ usb_debug_print(void)
 	usb_debug_print_ep(0, 1);
 
 	printf("Data:\n");
-	usb_debug_print_data(0, 4);
+	usb_debug_print_data(0, 32);
 }
 
 
@@ -661,7 +661,6 @@ usb_ep_boot(const struct usb_intf_desc *intf, uint8_t ep_addr, bool dual_bd)
 	for (int i=0; i<(dual_bd?2:1); i++) {
 		ep_regs->bd[i].csr = 0x0000;
 		ep_regs->bd[i].ptr = _usb_alloc_buf(wMaxPacketSize, (ep_addr & 0x80) ? true : false);
-		printf("%02x %d %x\n",ep_addr, i, ep_regs->bd[i].ptr);
 	}
 
 	/* Configure with the altsetting 0 config */

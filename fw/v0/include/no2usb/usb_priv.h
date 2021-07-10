@@ -25,6 +25,7 @@
 #endif
 
 #define USB_LOG_ERR(...)	USB_LOG(1, __VA_ARGS__)
+#define USB_LOG_INFO(...)	USB_LOG(2, __VA_ARGS__)
 
 
 /* Internal functions */

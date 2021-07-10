@@ -161,6 +161,15 @@ usb_handle_control_request(struct usb_ctrl_req *req)
 	g_usb.ctrl.xfer.cb_done = NULL;
 	g_usb.ctrl.xfer.cb_ctx  = NULL;
 
+	/* Debug */
+	USB_LOG_INFO("req t:%02x r:%02x v:%04x i:%04x l:%04x\n",
+		req->bmRequestType,
+		req->bRequest,
+		req->wValue,
+		req->wIndex,
+		req->wLength
+	);
+
 	/* Dipatch to all handlers */
 	rv = usb_dispatch_ctrl_req(req, &g_usb.ctrl.xfer);
 
