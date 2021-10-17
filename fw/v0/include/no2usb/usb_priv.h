@@ -16,10 +16,10 @@
 /* Debug logging */
 /* ------------- */
 
-#define USB_LOG_LEVEL 1
+//#define USB_LOG_LEVEL 1
 
 #ifdef USB_LOG_LEVEL
-# define USB_LOG(lvl,...)	if ((lvl) >= USB_LOG_LEVEL) printf(__VA_ARGS__)
+# define USB_LOG(lvl,...)	if ((lvl) <= USB_LOG_LEVEL) printf(__VA_ARGS__)
 #else
 # define USB_LOG(lvl,...)	do {} while(0)
 #endif
