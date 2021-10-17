@@ -109,7 +109,7 @@ usb_vc_vc_camera_desc_def(0);
 		uint8_t  bControlSize; \
 		uint8_t  bmControls[n]; \
 		uint8_t  iProcessing; \
-		uint8_t  bmProcessingStandards; \
+		uint8_t  bmVideoStandards; \
 	} __attribute__ ((packed))
 
 #define usb_vc_vc_extension_desc_def(n,m) \
