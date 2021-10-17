@@ -10,8 +10,7 @@
 #include <string.h>
 
 #include <no2usb/usb.h>
-
-#include "spi.h"
+#include <no2usb/usb_dfu.h>
 
 
 #define USB_RT_DFU_VENDOR_VERSION	((0 << 8) | 0xc1)
@@ -22,10 +21,7 @@
 static bool
 _dfu_vendor_spi_exec_cb(struct usb_xfer *xfer)
 {
-	struct spi_xfer_chunk sx[1] = {
-		{ .data = xfer->data, .len = xfer->len, .read = true, .write = true, },
-	};
-	spi_xfer(SPI_CS_FLASH, sx, 1);
+	usb_dfu_cb_flash_raw(xfer->data, xfer->len);
 	return true;
 }
 
