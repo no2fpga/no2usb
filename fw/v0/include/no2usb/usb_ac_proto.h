@@ -107,7 +107,7 @@ struct usb_ac_ac_output_desc {
 		uint8_t  bSourceID; \
 		uint8_t  bControlSize; \
 		uint8_t  bmaControls[n]; \
-		uint8_t  iTerminal; \
+		uint8_t  iFeature; \
 	} __attribute__ ((packed))
 
 #define usb_ac_ac_processing_common_desc_def(n, m) \
