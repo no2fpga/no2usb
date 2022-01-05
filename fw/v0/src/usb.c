@@ -564,7 +564,7 @@ static uint32_t
 _usb_alloc_buf(unsigned int size, bool in)
 {
 	uint32_t v = g_usb.ep_cfg.mem[in];
-	g_usb.ep_cfg.mem[in] += size;
+	g_usb.ep_cfg.mem[in] += (size + 3) & ~3;
 	return v;
 }
 
