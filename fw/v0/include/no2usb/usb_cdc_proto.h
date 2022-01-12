@@ -178,3 +178,12 @@ usb_cdc_union_desc_def(0);
 #define USB_NOTIF_CDC_LINE_STATE_CHANGE		0x29
 #define USB_NOTIF_CDC_CONNECTION_SPEED_CHANGE	0x2A
 
+
+/* Argument Structures */
+
+struct usb_cdc_line_coding {
+	uint32_t dwDTERate;
+	uint8_t  bCharFormat;
+	uint8_t  bParityType;
+	uint8_t  bDataBits;
+} __attribute__((packed));
