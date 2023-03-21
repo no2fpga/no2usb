@@ -47,7 +47,6 @@ module usb_phy #(
 				.IO_STANDARD("SB_LVCMOS")
 			) io_dp_I (
 				.PACKAGE_PIN(pad_dp),
-				.LATCH_INPUT_VALUE(1'b0),
 				.CLOCK_ENABLE(1'b1),
 				.INPUT_CLK(clk),
 				.OUTPUT_CLK(clk),
@@ -65,7 +64,6 @@ module usb_phy #(
 				.IO_STANDARD("SB_LVCMOS")
 			) io_dn_I (
 				.PACKAGE_PIN(pad_dn),
-				.LATCH_INPUT_VALUE(1'b0),
 				.CLOCK_ENABLE(1'b1),
 				.INPUT_CLK(clk),
 				.OUTPUT_CLK(clk),
