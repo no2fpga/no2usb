@@ -91,6 +91,15 @@ struct usb_cdc_dlm_desc {
 usb_cdc_union_desc_def(0);
 #define usb_cdc_union_desc usb_cdc_union_desc__0
 
+#define usb_cdc_coutry_sel_desc_def(n) \
+	struct usb_cdc_country_sel_desc__ ## n { \
+		uint8_t  bLength; \
+		uint8_t  bDescriptorType; \
+		uint8_t  bDescriptorsubtype; \
+		uint8_t  iCountryCodeRelDate; \
+		uint16_t wCountryCode[n]; \
+	} __attribute__((packed))
+
 
 /* Control requests */
 
