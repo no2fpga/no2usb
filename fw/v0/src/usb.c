@@ -593,7 +593,7 @@ _usb_ep_conf(uint8_t ep_addr, const struct usb_ep_desc *ep)
 	}
 
 	ep_regs->status = csr;
-	ep_regs->_rsvd[3] = ml;
+	ep_regs->_rsvd[2] = ml;
 	ep_regs->bd[0].csr = 0;
 	ep_regs->bd[1].csr = 0;
 
