@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <no2usb/usb_proto.h>
+
 
 enum usb_cdc_subclass {
 	USB_CDC_SCLS_DLCM	= 0x01,		/* Direct Line Control Model */
@@ -186,6 +188,25 @@ usb_cdc_union_desc_def(0);
 #define USB_NOTIF_CDC_CALL_STATE_CHANGE		0x28
 #define USB_NOTIF_CDC_LINE_STATE_CHANGE		0x29
 #define USB_NOTIF_CDC_CONNECTION_SPEED_CHANGE	0x2A
+
+	/* Basically the same as usb_ctrl_req but without alignement requirements */
+struct usb_cdc_notif_header {
+	union {
+		struct {
+			uint8_t  bmRequestType;
+			uint8_t  bRequest;
+		};
+		uint16_t wRequestAndType;
+	};
+	uint16_t wValue;
+	uint16_t wIndex;
+	uint16_t wLength;
+} __attribute__((packed));
+
+struct usb_cdc_notif_serial_state {
+        struct usb_cdc_notif_header hdr;
+        uint16_t bits;
+} __attribute__((packed));
 
 
 /* Argument Structures */
