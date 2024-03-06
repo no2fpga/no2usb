@@ -29,12 +29,19 @@ void
 usb_data_write(unsigned int dst_ofs, const void *src, int len)
 {
 	/* FIXME unaligned ofs */
-	const uint32_t *src_u32 = src;
+	const uint32_t *src_u32 = __builtin_assume_aligned(src, 4);
 	volatile uint32_t *dst_u32 = (volatile uint32_t *)((USB_DATA_BASE) + dst_ofs);
 
-	len = (len + 3) >> 2;
-	while (len--)
+	while (len >= 4) {
 		*dst_u32++ = *src_u32++;
+		len -= 4;
+	}
+
+	if (len) {
+		uint32_t w = 0;
+		memcpy(&w, src_u32, len);
+		*dst_u32 = w;
+	}
 }
 
 void
@@ -42,7 +49,7 @@ usb_data_read (void *dst, unsigned int src_ofs, int len)
 {
 	/* FIXME unaligned ofs */
 	volatile uint32_t *src_u32 = (volatile uint32_t *)((USB_DATA_BASE) + src_ofs);
-	uint32_t *dst_u32 = dst;
+	uint32_t *dst_u32 = __builtin_assume_aligned(dst, 4);
 
 	int i = len >> 2;
 
