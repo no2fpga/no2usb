@@ -396,10 +396,10 @@ enum usb_ac_extension_control {
 	USB_AC_XU_CONTROL_ENABLE		= 0x01,
 };
 
-enum usb_ac_vs_endpoint_control {
-	USB_AC_VS_EP_CONTROL_UNDEFINED		= 0x00,
-	USB_AC_VS_EP_CONTROL_SAMPLING_FREQ	= 0x01,
-	USB_AC_VS_EP_CONTROL_PITCH		= 0x02,
+enum usb_ac_as_endpoint_control {
+	USB_AC_AS_EP_CONTROL_UNDEFINED		= 0x00,
+	USB_AC_AS_EP_CONTROL_SAMPLING_FREQ	= 0x01,
+	USB_AC_AS_EP_CONTROL_PITCH		= 0x02,
 };
 
 enum usb_ac_ms_endpoint_control {
