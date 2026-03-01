@@ -84,7 +84,7 @@ struct usb_ac_ac_output_desc {
 		uint16_t wChannelConfig; \
 		uint8_t  iChannelNames; \
 		uint8_t  bmControls[m]; \
-		uint8_t  iMixer \
+		uint8_t  iMixer; \
 	} __attribute__ ((packed))
 
 #define usb_ac_ac_selector_desc_def(n) \
