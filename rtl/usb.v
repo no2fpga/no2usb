@@ -537,7 +537,7 @@ module usb #(
 				if (rst)
 					evt_cnt <= 4'h0;
 				else
-					evt_cnt <= evt_rd_ack ? { 3'b000, evt_stb } : (evt_cnt + evt_stb);
+					evt_cnt <= evt_rd_ack ? { 3'b000, evt_stb } : (evt_cnt + (evt_stb & ~&evt_cnt));
 
 			assign evt_rd_rdy = 1'b1;
 			assign evt_rd_data = { evt_cnt, 12'h000 };
@@ -553,7 +553,7 @@ module usb #(
 				if (rst)
 					evt_cnt <= 4'h0;
 				else
-					evt_cnt <= evt_rd_ack ? { 3'b000, evt_stb } : (evt_cnt + evt_stb);
+					evt_cnt <= evt_rd_ack ? { 3'b000, evt_stb } : (evt_cnt + (evt_stb & ~&evt_cnt));
 
 			always @(posedge clk)
 				if (evt_stb)
